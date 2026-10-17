@@ -173,6 +173,19 @@
    "price": 200000,
    "unit": "100g",
    "photo": "images/mvcjw5sjq3w06-mvcjw5sj.jpg"
+  },
+  {
+   "id": "mvcjy6ugos3xs",
+   "ts": 1792250964520,
+   "date": "2025-12-12",
+   "name": "Cà phê Red Moon Strawberry Candy",
+   "process": "",
+   "origin": "Shan State và Santa Lucia",
+   "roast": 3,
+   "roastText": "Sáng+",
+   "price": 215000,
+   "unit": "100g",
+   "photo": "images/mvcjy6ugos3xs-mvcjy6uh.jpg"
   }
  ]
 }
