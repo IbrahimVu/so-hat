@@ -478,7 +478,10 @@
    "unit": "100g",
    "photo": "images/mvckq1xl2ubwx-mvckq1xl.jpg",
    "buyUrl": "",
-   "infoUrl": ""
+   "infoUrl": "",
+   "soldOut": true,
+   "brew": [],
+   "flavors": []
   },
   {
    "id": "mvcktgcmwppo2",
