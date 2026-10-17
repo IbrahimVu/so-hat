@@ -511,8 +511,21 @@
    "price": 175000,
    "unit": "125g",
    "photo": "images/mvcktgcmwppo2-mvcktgcm.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/8AWwGyX4Xa",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Espresso",
+    "Phin",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Socola",
+    "Mật ong",
+    "Vang / lên men",
+    "Dưa lưới"
+   ]
   },
   {
    "id": "mvckvuyiy4qdt",
