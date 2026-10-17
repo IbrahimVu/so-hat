@@ -721,6 +721,31 @@
     "Dưa chuột",
     "Kẹo dẻo dưa hấu"
    ]
+  },
+  {
+   "id": "mvcotu841r5qx",
+   "ts": 1792259159620,
+   "date": "2026-10-18",
+   "name": "Cà phê Java",
+   "process": "Washed",
+   "origin": "Paksong, Lào",
+   "roast": 3,
+   "roastText": "",
+   "price": 314000,
+   "unit": "200g",
+   "photo": "images/mvcotu841r5qx-mvcotu84.jpg",
+   "buyUrl": "https://s.shopee.vn/8pmd61tHdc",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "V60"
+   ],
+   "flavors": [
+    "Hoa",
+    "Trà đen",
+    "Hoa trắng"
+   ]
   }
  ]
 }
