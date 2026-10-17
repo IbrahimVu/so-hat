@@ -251,14 +251,27 @@
    "id": "mvcjlthydrdh8",
    "ts": 1792250387350,
    "date": "2026-01-20",
-   "name": "Cà Phê Costa Rica Don Claudio",
+   "name": "Cà Phê Don Claudio",
    "process": "Washed",
    "origin": "Pérez Zeledón, Brunca, Costa Rica",
    "roast": 2,
    "roastText": "",
    "price": 150000,
    "unit": "125g",
-   "photo": "images/mvcjlthydrdh8-mvcjlthy.jpg"
+   "photo": "images/mvcjlthydrdh8-mvcjlthy.jpg",
+   "buyUrl": "https://s.shopee.vn/6q1YdNtFk6",
+   "infoUrl": "",
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Trái cây nhiệt đới",
+    "Hoa",
+    "Socola",
+    "Vang / lên men",
+    "Nho khô"
+   ]
   },
   {
    "id": "mvcjsgd9p8y7d",
