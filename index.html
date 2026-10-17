@@ -228,6 +228,24 @@ const BREWS=["Phin","Pour-over","Espresso","Cold brew","French press","AeroPress
 const FLAVORS=["Socola","Caramel","Hạt dẻ","Mật ong","Đường nâu","Berry","Cam chanh","Trái cây nhiệt đới","Hoa","Trà","Vang / lên men","Gia vị","Đắng đậm","Chua thanh"];
 const tagList=v=>Array.isArray(v)?v.map(x=>String(x||"").trim()).filter(Boolean):[];
 const splitTags=v=>String(v||"").split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
+const PROMOTE_MIN=6; // a typed-in value used more than 5 times becomes a ready-made choice
+const normKey=v=>String(v||"").trim().toLowerCase().replace(/\s+/g," ");
+function tally(target,field,values){ const m=target[field]||(target[field]=new Map()); for(const [label,n] of values){ const k=normKey(label); if(!k) continue; const e=m.get(k)||{n:0,labels:new Map()}; e.n+=n; e.labels.set(label,(e.labels.get(label)||0)+n); m.set(k,e); } }
+function beanCounts(beans){ const out={}; const add=(f,v)=>{ v=String(v||"").trim(); if(!v) return; (out[f]||(out[f]={}))[v]=(out[f][v]||0)+1; };
+  for(const b of beans||[]){ add("process",b.process); add("roastText",b.roastText); add("unit",b.unit); add("origin",b.origin); tagList(b.brew).forEach(v=>add("brew",v)); tagList(b.flavors).forEach(v=>add("flavors",v)); } return out; }
+function popular(){
+  const t={}; const feed=c=>{ for(const f in c) tally(t,f,Object.entries(c[f]||{}).map(([k,n])=>[k,+n||0])); };
+  feed(beanCounts(OWNER.data.beans));
+  for(const p of (COMM.index&&COMM.index.profiles)||[]) if(p&&p.tags&&typeof p.tags==="object") feed(p.tags);
+  const built={process:PROCESS,unit:UNITS,brew:BREWS,flavors:FLAVORS,origin:ORIGINS,roastText:ROASTS};
+  const out={};
+  for(const f of ["process","roastText","unit","brew","flavors","origin"]){
+    const skip=new Set((built[f]||[]).map(normKey));
+    out[f]=[...((t[f]||new Map()).entries())].filter(([k,e])=>e.n>=PROMOTE_MIN&&!skip.has(k)).sort((a,b)=>b[1].n-a[1].n).slice(0,12)
+      .map(([k,e])=>[...e.labels.entries()].sort((a,b)=>b[1]-a[1])[0][0]);
+  }
+  return out;
+}
 const SORTS={new:"Mới nhất",cheap:"Giá/100g: thấp → cao",dear:"Giá/100g: cao → thấp"};
 
 const S={route:{name:"owner"},token:null,edit:false,branch:"main",filter:"Tất cả",brew:"",sort:"new",del:null,delProfile:false};
@@ -441,7 +459,7 @@ function card(b,ctx){
       <div class="price">${b.price?`<b>${vnd(b.price)}</b><span>/ ${esc(b.unit||"250g")}</span>`:`<span>Chưa có giá</span>`}</div>
       ${(()=>{ const p=per100(b); return p!=null&&grams(b.unit||"250g")!==100?`<div class="per100">≈ ${vnd(Math.round(p/100)*100)} / 100g</div>`:""; })()}
       ${(()=>{ const buy=safeHref(b.buyUrl), info=safeHref(b.infoUrl); if(!buy&&!info&&!b.soldOut) return "";
-        return `<div class="links">${b.soldOut?`<span class="linkchip out">Hết hàng</span>`:buy?`<a class="linkchip buy" href="${esc(buy)}" target="_blank" rel="noopener noreferrer nofollow ugc">Mua ở đây ↗</a>`:""}${info?`<a class="linkchip" href="${esc(info)}" target="_blank" rel="noopener noreferrer nofollow ugc">Thông tin ↗ <small>${esc(hostOf(info))}</small></a>`:""}</div>`; })()}
+        return `<div class="links">${b.soldOut?`<span class="linkchip out">Hết hàng</span>`:buy?`<a class="linkchip buy" href="${esc(buy)}" target="_blank" rel="noopener noreferrer nofollow ugc">Mua ở đây ↗</a>`:""}${info?`<a class="linkchip" href="${esc(info)}" target="_blank" rel="noopener noreferrer nofollow ugc">Thông tin ↗</a>`:""}</div>`; })()}
       <div class="foot">${fmtDate(b)}</div>
       ${ctx.canEdit?(S.del===b.id?`<div class="acts2"><span style="font-size:13px;align-self:center">Xoá hạt này?</span><button class="btn sm primary" data-act="del" data-id="${esc(b.id)}">Xoá</button><button class="btn sm" data-act="nodel">Giữ</button></div>`:`<div class="acts2"><button class="btn sm" data-act="edit" data-id="${esc(b.id)}">Sửa</button><button class="btn sm ghost" data-act="askdel" data-id="${esc(b.id)}">Xoá</button></div>`):""}
     </div></article>`;
@@ -611,28 +629,32 @@ function openBean(b){
   F=b?{...b,pic:imgUrl(b.photo)||null,picNew:null}:{id:null,name:"",date:today(),process:"",origin:"",roast:3,roastText:"",price:0,unit:"250g",photo:"",pic:null,picNew:null};
   F.kind="bean"; F.busy=false; if(!F.date) F.date=dayOf(F); F.brew=tagList(F.brew); F.flavors=tagList(F.flavors);
   const chip=(k,v,on)=>`<button type="button" class="chip" data-chip="${k}" data-v="${esc(v)}" aria-pressed="${on}">${esc(v)}</button>`;
-  const cProc=F.process&&!PROCESS.includes(F.process), cUnit=!UNITS.includes(F.unit);
+  const POP=popular(), PROC=[...PROCESS,...POP.process], UNITL=[...UNITS,...POP.unit], BRW=[...BREWS,...POP.brew], FLV=[...FLAVORS,...POP.flavors], ORG=[...ORIGINS,...POP.origin], RTX=POP.roastText;
+  const snap=(v,list)=>{ const k=normKey(v); return list.find(x=>normKey(x)===k)||v; };
+  if(F.process) F.process=snap(F.process,PROC); if(F.unit) F.unit=snap(F.unit,UNITL); if(F.roastText) F.roastText=snap(F.roastText,RTX);
+  F.brew=[...new Set(F.brew.map(v=>snap(v,BRW)))]; F.flavors=[...new Set(F.flavors.map(v=>snap(v,FLV)))];
+  const cProc=F.process&&!PROC.includes(F.process), cUnit=!UNITL.includes(F.unit), cRoast=F.roastText&&!RTX.includes(F.roastText);
   sheet(F.id?"Sửa hạt":"Thêm hạt",`
     <div class="field"><span class="lbl">Hình ảnh</span><label class="drop" id="drop" for="drop-file"></label><input type="file" id="drop-file" accept="image/*" hidden></div>
     <div class="row2">
       <div class="field"><label class="lbl" for="f-name">Tên hạt</label><input id="f-name" required maxlength="100" value="${esc(F.name)}" placeholder="Arabica Cầu Đất, Ethiopia Guji…"></div>
       <div class="field"><label class="lbl" for="f-date">Ngày</label><input id="f-date" type="date" required value="${esc(F.date)}"></div>
     </div>
-    <div class="field"><span class="lbl">Sơ chế</span><div class="unitrow" role="group" aria-label="Sơ chế">${PROCESS.map(v=>chip("process",v,F.process===v)).join("")}<input id="f-proc" maxlength="30" placeholder="Khác: Carbonic…" aria-label="Kiểu sơ chế khác" value="${cProc?esc(F.process):""}" class="${cProc?"on":""}" style="width:150px"></div></div>
-    <div class="field"><label class="lbl" for="f-origin">Vùng trồng</label><input id="f-origin" list="dl-o" maxlength="80" value="${esc(F.origin)}" placeholder="Cầu Đất, Đà Lạt"><datalist id="dl-o">${ORIGINS.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
+    <div class="field"><span class="lbl">Sơ chế</span><div class="unitrow" role="group" aria-label="Sơ chế">${PROC.map(v=>chip("process",v,F.process===v)).join("")}<input id="f-proc" maxlength="30" placeholder="Khác: Carbonic…" aria-label="Kiểu sơ chế khác" value="${cProc?esc(F.process):""}" class="${cProc?"on":""}" style="width:150px"></div></div>
+    <div class="field"><label class="lbl" for="f-origin">Vùng trồng</label><input id="f-origin" list="dl-o" maxlength="80" value="${esc(F.origin)}" placeholder="Cầu Đất, Đà Lạt"><datalist id="dl-o">${ORG.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
     <div class="field"><span class="lbl">Ngưỡng rang</span><div class="roastpick" role="group">${ROASTS.map((r,i)=>`<button type="button" data-chip="roast" data-v="${i+1}" aria-pressed="${!F.roastText&&+F.roast===i+1}"><i style="background:var(--r${i+1})"></i><span>${r}</span></button>`).join("")}</div>
-      <div class="unitrow"><input id="f-roast" maxlength="40" placeholder="Khác: Medium-light, Omni, Agtron 65…" aria-label="Ngưỡng rang khác" value="${esc(F.roastText||"")}" class="${F.roastText?"on":""}" style="width:100%;max-width:320px"></div></div>
-    <div class="field"><span class="lbl">Phù hợp pha (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Phù hợp pha">${[...BREWS,...F.brew.filter(v=>!BREWS.includes(v))].map(v=>`<button type="button" class="chip" data-chip="brew" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.brew.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-brew-x" class="tagadd" maxlength="60" placeholder="Khác: Syphon, Clever…" aria-label="Kiểu pha khác"></div></div>
-    <div class="field"><span class="lbl">Hương vị (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Hương vị">${[...FLAVORS,...F.flavors.filter(v=>!FLAVORS.includes(v))].map(v=>`<button type="button" class="chip" data-chip="flavors" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.flavors.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-flav-x" class="tagadd" maxlength="80" placeholder="Thêm vị: Vải, Nho, Quế…" aria-label="Hương vị khác"></div></div>
+      <div class="unitrow" role="group" aria-label="Ngưỡng rang khác">${RTX.map(v=>chip("roastText",v,F.roastText===v)).join("")}<input id="f-roast" maxlength="40" placeholder="Khác: Medium-light, Omni, Agtron 65…" aria-label="Ngưỡng rang khác" value="${cRoast?esc(F.roastText):""}" class="${cRoast?"on":""}" style="flex:1 1 220px;max-width:320px"></div></div>
+    <div class="field"><span class="lbl">Phù hợp pha (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Phù hợp pha">${[...BRW,...F.brew.filter(v=>!BRW.includes(v))].map(v=>`<button type="button" class="chip" data-chip="brew" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.brew.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-brew-x" class="tagadd" maxlength="60" placeholder="Khác: Syphon, Clever…" aria-label="Kiểu pha khác"></div></div>
+    <div class="field"><span class="lbl">Hương vị (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Hương vị">${[...FLV,...F.flavors.filter(v=>!FLV.includes(v))].map(v=>`<button type="button" class="chip" data-chip="flavors" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.flavors.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-flav-x" class="tagadd" maxlength="80" placeholder="Thêm vị: Vải, Nho, Quế…" aria-label="Hương vị khác"></div></div>
     <div class="field"><label class="lbl" for="f-price">Giá bán</label><div class="pricebox"><input id="f-price" inputmode="numeric" maxlength="13" value="${F.price?Number(F.price).toLocaleString("vi-VN"):""}" placeholder="180.000"><span>₫</span></div>
-      <div class="unitrow" role="group" aria-label="Khối lượng">${UNITS.map(v=>chip("unit",v,F.unit===v)).join("")}<input id="f-unit" maxlength="10" placeholder="Khác: 300g" aria-label="Khối lượng khác" value="${cUnit?esc(F.unit||""):""}" class="${cUnit?"on":""}"></div></div>
+      <div class="unitrow" role="group" aria-label="Khối lượng">${UNITL.map(v=>chip("unit",v,F.unit===v)).join("")}<input id="f-unit" maxlength="10" placeholder="Khác: 300g" aria-label="Khối lượng khác" value="${cUnit?esc(F.unit||""):""}" class="${cUnit?"on":""}"></div></div>
     <div class="field"><label class="lbl" for="f-buy">Link mua (tuỳ chọn)</label><div class="buyrow"><input id="f-buy" inputmode="url" autocomplete="off" maxlength="500" value="${esc(F.buyUrl||"")}" placeholder="Shopee, website quán rang, trang Facebook…"><label class="chk"><input type="checkbox" id="f-out" ${F.soldOut?"checked":""}> Hết hàng</label></div></div>
     <div class="field"><label class="lbl" for="f-info">Link thông tin sản phẩm (tuỳ chọn)</label><input id="f-info" inputmode="url" autocomplete="off" maxlength="500" value="${esc(F.infoUrl||"")}" placeholder="Trang giới thiệu hạt, bài review…"></div>`,
     F.id?"Lưu":"Đăng hạt");
   drawDrop(); wireDrop("drop",async f=>{ F.busy=true; drawDrop(); try{ F.picNew=await compress(f,[1600,1280,1080,900],700000); F.pic=F.picNew; }catch(e){ toast("Không đọc được ảnh này. Thử ảnh JPG hoặc PNG."); } F.busy=false; drawDrop(); });
   const pr=document.getElementById("f-price"); pr.addEventListener("input",()=>{ const n=pr.value.replace(/\D/g,"").slice(0,10); pr.value=n?Number(n).toLocaleString("vi-VN"):""; });
   const free=(id,key,group)=>{ const el=document.getElementById(id); el.addEventListener("input",()=>{ const v=el.value.trim(); el.classList.toggle("on",!!v); F[key]=v; if(v||group==="roast") document.querySelectorAll(`[data-chip="${group}"]`).forEach(b=>b.setAttribute("aria-pressed",String(group==="roast"&&!v&&+b.dataset.v===+F.roast))); }); };
-  free("f-roast","roastText","roast"); free("f-proc","process","process"); free("f-unit","unit","unit");
+  free("f-roast","roastText","roast"); document.getElementById("f-roast").addEventListener("input",()=>document.querySelectorAll('[data-chip="roastText"]').forEach(b=>b.setAttribute("aria-pressed","false"))); free("f-proc","process","process"); free("f-unit","unit","unit");
   setTimeout(()=>document.getElementById("f-name")?.focus(),50);
 }
 function drawDrop(){ const d=document.getElementById("drop"); if(!d||!F) return;
@@ -656,7 +678,8 @@ document.addEventListener("click",async ev=>{
   if(c&&F&&F.kind==="bean"&&c.dataset.multi==="1"){ const k=c.dataset.chip, v=c.dataset.v; const set=new Set(F[k]); set.has(v)?set.delete(v):set.add(v); F[k]=[...set]; c.setAttribute("aria-pressed",String(set.has(v))); return; }
   if(c&&F&&F.kind==="bean"){ const k=c.dataset.chip; let v=c.dataset.v;
     const clr=id=>{ const el=document.getElementById(id); if(el){ el.value=""; el.classList.remove("on"); } };
-    if(k==="process") clr("f-proc"); if(k==="unit") clr("f-unit"); if(k==="roast"){ v=+v; F.roastText=""; clr("f-roast"); }
+    if(k==="process") clr("f-proc"); if(k==="unit") clr("f-unit"); if(k==="roast"){ v=+v; F.roastText=""; clr("f-roast"); document.querySelectorAll('[data-chip="roastText"]').forEach(b=>b.setAttribute("aria-pressed","false")); }
+    if(k==="roastText"){ clr("f-roast"); F.roastText=F.roastText===v?"":v; document.querySelectorAll('[data-chip="roast"]').forEach(b=>b.setAttribute("aria-pressed",String(!F.roastText&&+b.dataset.v===+F.roast))); c.parentElement.querySelectorAll('[data-chip="roastText"]').forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===F.roastText))); return; }
     F[k]=(k==="process"&&F[k]===v)?"":v;
     c.parentElement.querySelectorAll("[data-chip]").forEach(b=>b.setAttribute("aria-pressed",String((k==="roast"?+b.dataset.v:b.dataset.v)===F[k]))); return; }
   const a=ev.target.closest("[data-act]"); if(!a) return; const act=a.dataset.act;
@@ -765,6 +788,7 @@ document.addEventListener("submit",async ev=>{
   let tok=null; try{ tok=localStorage.getItem(TOKEN_KEY); }catch(e){}
   if(tok){ try{ await connect(tok); }catch(e){ S.token=null; S.edit=false; if(e.status===401){ try{ localStorage.removeItem(TOKEN_KEY); }catch(_){} } } }
   S.route=parseHash(); render(); ensureData();
+  if(!COMM.loaded&&S.route.name!=="community") loadIndex();
   if(S.route.name!=="owner") loadOwner();
 })();
 })();
