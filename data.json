@@ -746,6 +746,32 @@
     "Trà đen",
     "Hoa trắng"
    ]
+  },
+  {
+   "id": "mvcozo2o1ifmv",
+   "ts": 1792259431584,
+   "date": "2026-07-19",
+   "name": "Cà phê “BÂNG KHUÂNG”",
+   "process": "Natural",
+   "origin": "Đạ Sar, Lạc Dương, Lâm Đồng",
+   "roast": 3,
+   "roastText": "Omni",
+   "price": 165000,
+   "unit": "250g",
+   "photo": "images/mvcozo2o1ifmv-mvcozo2o.jpg",
+   "buyUrl": "https://s.shopee.vn/70Kyv1esB8",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Phin",
+    "Pour-over",
+    "Espresso"
+   ],
+   "flavors": [
+    "Vỏ cam khô",
+    "Hương hoa rừng",
+    "Cacao"
+   ]
   }
  ]
 }
