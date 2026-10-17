@@ -589,7 +589,12 @@
    "unit": "200g",
    "photo": "images/mvcl2iod8e9ep-mvcl2iod.jpg",
    "buyUrl": "",
-   "infoUrl": ""
+   "infoUrl": "",
+   "soldOut": true,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": []
   },
   {
    "id": "mvcl52h3gskvx",
