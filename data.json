@@ -160,6 +160,19 @@
    "price": 185000,
    "unit": "100g",
    "photo": "images/mvcjsgd9p8y7d-mvcjsgd9.jpg"
+  },
+  {
+   "id": "mvcjw5sjq3w06",
+   "ts": 1792250869843,
+   "date": "2025-12-12",
+   "name": "Cà phê Yellow Solis Mango & Lychee",
+   "process": "",
+   "origin": "Shan State",
+   "roast": 3,
+   "roastText": "Sáng+",
+   "price": 200000,
+   "unit": "100g",
+   "photo": "images/mvcjw5sjq3w06-mvcjw5sj.jpg"
   }
  ]
 }
