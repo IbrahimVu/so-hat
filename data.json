@@ -562,8 +562,19 @@
    "price": 196000,
    "unit": "100g",
    "photo": "images/mvckxzkoc51w3-mvckxzko.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/6L5I5lEDh9",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Rose",
+    "Peach",
+    "Strawberry",
+    "Maple Syrup",
+    "Champagne"
+   ]
   },
   {
    "id": "mvcl2iod8e9ep",
