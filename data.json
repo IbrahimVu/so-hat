@@ -127,7 +127,17 @@
    "roastText": "",
    "price": 108000,
    "unit": "250g",
-   "photo": "images/muqtd5id6sxov.jpg"
+   "photo": "images/muqtd5id6sxov.jpg",
+   "buyUrl": "",
+   "infoUrl": "",
+   "brew": [
+    "Espresso",
+    "Phin",
+    "Moka pot"
+   ],
+   "flavors": [
+    "Đắng đậm"
+   ]
   },
   {
    "id": "mvcj9xjfnor3t",
