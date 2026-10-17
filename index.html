@@ -141,19 +141,49 @@ input,textarea{font:inherit;color:var(--ink)}
 </head>
 <body>
 <style>
-.foot-links{max-width:1100px;margin:0 auto;padding:0 16px 40px;display:flex;gap:12px;justify-content:center;font-size:12.5px;color:var(--muted)}
+.nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+.nav a{padding:7px 12px;border-radius:999px;font-weight:500;color:var(--muted);text-decoration:none;font-size:14px}
+.nav a[aria-current="true"]{background:var(--ink);color:var(--bg)}
+.nav a:hover:not([aria-current="true"]){background:var(--sunk);color:var(--ink)}
+.foot-links{max-width:1100px;margin:0 auto;padding:0 16px 40px;display:flex;gap:12px;justify-content:center;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
 .linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:12.5px}
 .linkbtn:hover{color:var(--ink)}
 .help{font-size:13px;color:var(--muted);line-height:1.55}
 .help ol{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}
 .help a{color:var(--accent)}
 .err{color:var(--accent);font-size:13px}
-.editbar{margin-left:auto;display:flex;gap:8px;align-items:center}
-.editbar .editchip{margin-left:0}
+.editchip{margin-left:0}
+.pgh{margin-bottom:20px}
+.pgh h1{font-size:clamp(28px,5vw,42px);font-weight:800;letter-spacing:-.03em}
+.pgh p{margin:8px 0 0;color:var(--muted);max-width:62ch}
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.person{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink);min-width:0}
+.person:hover{border-color:var(--ink)}
+.person img{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;background:var(--sunk)}
+.person b{font-family:var(--f-display);font-size:18px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.person span{font-size:13px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px;margin-bottom:22px}
+.panel h3{font-size:17px}
+.keybox{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.keybox input{flex:1 1 260px;min-width:0;font-family:var(--f-mono);font-size:12.5px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.formcard{max-width:560px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:16px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.adm{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+table.adm th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line)}
+table.adm td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.adm tr:last-child td{border-bottom:0}
+table.adm img{width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;background:var(--sunk)}
+table.adm .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.statrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.statrow div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.statrow b{font-family:var(--f-display);font-size:22px;display:block}
+.statrow span{font-size:12px;color:var(--muted)}
+.ts-box{min-height:66px}
+@media (max-width:640px){ .nav{margin-left:0;width:100%} .nav a{flex:1;text-align:center;padding:7px 6px;font-size:13px} }
 </style>
 <header class="bar"><div class="bar-in">
-  <span class="brand"><svg viewBox="0 0 12 16" aria-hidden="true"><ellipse cx="6" cy="8" rx="5" ry="7" fill="var(--r3)"/><path d="M6.2 1.5c-2.2 3 2.2 6.5-.2 13" stroke="var(--bg)" stroke-width="1.2" fill="none"/></svg>Sổ Hạt</span>
-  <span class="editbar" id="editbar" hidden><span class="editchip">Chế độ chỉnh sửa</span><button class="btn sm ghost" data-act="logout">Thoát</button></span>
+  <a class="brand" href="#" style="color:inherit;text-decoration:none"><svg viewBox="0 0 12 16" aria-hidden="true"><ellipse cx="6" cy="8" rx="5" ry="7" fill="var(--r3)"/><path d="M6.2 1.5c-2.2 3 2.2 6.5-.2 13" stroke="var(--bg)" stroke-width="1.2" fill="none"/></svg>Sổ Hạt</a>
+  <nav class="nav" id="nav" aria-label="Điều hướng"></nav>
 </div></header>
 <main class="wrap" id="app"><p class="muted">Đang tải sổ hạt…</p></main>
 <div class="foot-links" id="foot"></div>
@@ -161,7 +191,7 @@ input,textarea{font:inherit;color:var(--ink)}
 <div id="overlay"></div>
 <script>
 (() => {
-/* ---------- where the data lives ---------- */
+/* ================= config ================= */
 const FALLBACK_REPO="ibrahimvu/so-hat";
 function detectRepo(){
   const h=location.hostname, seg=location.pathname.split("/").filter(Boolean)[0];
@@ -170,106 +200,211 @@ function detectRepo(){
 }
 const GH=detectRepo();
 const API=`https://api.github.com/repos/${GH.owner}/${GH.repo}`;
-const TOKEN_KEY="sohat-gh-token";
+const TOKEN_KEY="sohat-gh-token", KEYS_KEY="sohat-keys";
+let CFG={workerUrl:"",turnstileSiteKey:"",branch:"main"};
 
 const PROCESS=["Washed","Natural","Honey","Anaerobic","Semi-washed"];
 const ROASTS=["Rất sáng","Sáng","Vừa","Đậm","Rất đậm"];
 const UNITS=["100g","250g","500g","1kg"];
 const ORIGINS=["Cầu Đất, Đà Lạt","Lạc Dương, Lâm Đồng","Buôn Ma Thuột, Đắk Lắk","Gia Lai","Sơn La","Khe Sanh, Quảng Trị","Ethiopia Yirgacheffe","Ethiopia Guji","Kenya","Colombia Huila","Brazil Cerrado","Panama","Guatemala","Indonesia Sumatra"];
 const SORTS={new:"Mới nhất",cheap:"Giá/100g: thấp → cao",dear:"Giá/100g: cao → thấp"};
-const S={edit:false,token:null,branch:"main",filter:"Tất cả",sort:"new",del:null,loaded:false,error:null};
-let DATA={profile:{},beans:[]};
-const LOCAL=new Map(); // image path -> data URL, for photos saved this session before Pages rebuilds
-try{ const v=localStorage.getItem("sohat-sort"); if(v&&SORTS[v]) S.sort=v; }catch(e){}
 
+const S={route:{name:"owner"},token:null,edit:false,branch:"main",filter:"Tất cả",sort:"new",del:null,delProfile:false};
+const OWNER={data:{profile:{},beans:[]},loaded:false,error:null};
+const COMM={index:null,loaded:false,error:null,adminIndex:null};
+const PROFILES=new Map(); // id -> {doc, error}
+const LOCAL=new Map();    // image path -> data URL saved this session
+let KEYS={}; try{ KEYS=JSON.parse(localStorage.getItem(KEYS_KEY)||"{}")||{}; }catch(e){ KEYS={}; }
+try{ const v=localStorage.getItem("sohat-sort"); if(v&&SORTS[v]) S.sort=v; }catch(e){}
+const saveKeys=()=>{ try{ localStorage.setItem(KEYS_KEY,JSON.stringify(KEYS)); }catch(e){} };
+
+/* ================= helpers ================= */
 const $app=document.getElementById("app");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const safePath=p=>typeof p==="string"&&/^images\/[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)$/.test(p);
-const imgSrc=p=>LOCAL.get(p)||(safePath(p)?p:"");
-const rawUrl=p=>`https://raw.githubusercontent.com/${GH.owner}/${GH.repo}/${S.branch}/${p}`;
+const ownerPathOk=p=>typeof p==="string"&&/^images\/[A-Za-z0-9._-]+\.(jpg|jpeg|png|webp)$/.test(p);
+const commPathOk=p=>typeof p==="string"&&/^community\/[a-z0-9]{10}\/img\/[a-z0-9-]+\.jpg$/.test(p);
+const imgUrl=p=>LOCAL.get(p)||((ownerPathOk(p)||commPathOk(p))?p:"");
+const rawUrl=p=>`https://raw.githubusercontent.com/${GH.owner}/${GH.repo}/${S.branch||CFG.branch||"main"}/${p}`;
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const vnd=n=>n?Number(n).toLocaleString("vi-VN")+" ₫":"";
 const today=()=>{ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const dayOf=b=>b.date||new Date(b.ts||0).toISOString().slice(0,10);
 const fmtDate=b=>{ const [y,m,d]=dayOf(b).split("-"); return `${+d}/${+m}/${y}`; };
+const fmtTime=ts=>ts?new Date(ts).toLocaleString("vi-VN",{dateStyle:"short",timeStyle:"short"}):"–";
 const byDate=(a,b)=>dayOf(b).localeCompare(dayOf(a))||(b.ts||0)-(a.ts||0);
 function grams(u){ const m=String(u||"").trim().toLowerCase().replace(",",".").match(/^([\d.]+)\s*(kg|kilo|g|gr|gram|lb|lbs|oz)?$/); if(!m) return null; const n=parseFloat(m[1]); if(!(n>0)) return null; return n*({kg:1000,kilo:1000,lb:453.6,lbs:453.6,oz:28.35}[m[2]]||1); }
 const per100=b=>{ const g=grams(b.unit||"250g"); return b.price&&g?b.price/g*100:null; };
 const beanSvg=`<svg viewBox="0 0 12 16" aria-hidden="true"><ellipse cx="6" cy="8" rx="5" ry="7" fill="var(--muted)"/><path d="M6.2 1.5c-2.2 3 2.2 6.5-.2 13" stroke="var(--sunk)" stroke-width="1.2" fill="none"/></svg>`;
 const defAvatar="data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="#A97A4C"/><ellipse cx="20" cy="20" rx="8" ry="11" fill="#55341D"/><path d="M20.5 9.5c-3.5 4.5 3.5 10-.5 21" stroke="#A97A4C" stroke-width="1.6" fill="none"/></svg>');
-function toast(m,ms=3600){ const t=document.createElement("div"); t.className="toast"; t.setAttribute("role","status"); t.textContent=m; document.getElementById("overlay").appendChild(t); setTimeout(()=>t.remove(),ms); }
-// A just-uploaded photo may not be on GitHub Pages yet: fall back to the repo's raw file.
+function toast(m,ms=3800){ const t=document.createElement("div"); t.className="toast"; t.setAttribute("role","status"); t.textContent=m; document.getElementById("overlay").appendChild(t); setTimeout(()=>t.remove(),ms); }
+function busy(text){ const ov=document.createElement("div"); ov.className="saving"; ov.innerHTML=`<div>${esc(text)}</div>`; document.body.appendChild(ov); return ()=>ov.remove(); }
+async function copy(text){ try{ await navigator.clipboard.writeText(text); toast("Đã sao chép."); }catch(e){ const i=document.querySelector(".keybox input"); if(i){ i.select(); } toast("Hãy chọn và sao chép thủ công."); } }
+// A file committed a moment ago may not be on GitHub Pages yet: fall back to the repo's raw copy.
 document.addEventListener("error",e=>{ const im=e.target; if(im.tagName==="IMG"&&im.dataset.p&&!im.dataset.fb){ im.dataset.fb="1"; im.src=rawUrl(im.dataset.p); } },true);
+async function fetchJson(path){
+  const r=await fetch(path+"?t="+Date.now(),{cache:"no-store"});
+  if(r.status===404) return null;
+  if(!r.ok){ const e=new Error("http "+r.status); e.status=r.status; throw e; }
+  return r.json();
+}
+const editLink=(id,key)=>`${location.origin}${location.pathname}#u/${id}/k/${key}`;
 
-/* ---------- GitHub API ---------- */
+/* ================= GitHub (owner) ================= */
 async function gh(path,opts={}){
-  const r=await fetch(API+path,{...opts,headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+S.token,"X-GitHub-Api-Version":"2022-11-28",...(opts.body?{"Content-Type":"application/json"}:{}),...(opts.headers||{})}});
-  if(!r.ok){ const err=new Error("gh "+r.status); err.status=r.status; try{ err.body=await r.json(); }catch(_){} throw err; }
+  const r=await fetch(API+path,{...opts,headers:{"Accept":opts.raw?"application/vnd.github.raw+json":"application/vnd.github+json","Authorization":"Bearer "+S.token,"X-GitHub-Api-Version":"2022-11-28",...(opts.body?{"Content-Type":"application/json"}:{})}});
+  if(r.status===404&&opts.allow404) return null;
+  if(!r.ok){ const err=new Error("gh "+r.status); err.status=r.status; throw err; }
   return r.status===204?null:(opts.raw?r.text():r.json());
 }
+async function ghJson(path){ const t=await gh(`/contents/${path}?ref=${S.branch}`,{raw:true,allow404:true}); return t==null?null:JSON.parse(t); }
 async function connect(token){
   S.token=token;
   const info=await gh("");
   if(!info.permissions||!info.permissions.push){ const e=new Error("no push"); e.status=403; throw e; }
   S.branch=info.default_branch||"main"; S.edit=true;
 }
-// One atomic commit: data.json plus any new images, minus any removed images.
-async function commit(next,newImages,removePaths,message){
-  for(let attempt=0;attempt<2;attempt++){
-    const ref=await gh(`/git/ref/heads/${S.branch}`);
-    const head=ref.object.sha;
+// Atomic commit. build(headSha, treeSha) → {files:[{path,content}|{path,b64}|{path,delete:true}], message}
+async function ghCommit(build){
+  for(let attempt=0;attempt<3;attempt++){
+    const ref=await gh(`/git/ref/heads/${S.branch}`); const head=ref.object.sha;
     const base=await gh(`/git/commits/${head}`);
+    const {files,message}=await build(head,base.tree.sha);
     const tree=[];
-    for(const [path,dataUrl] of newImages){
-      const blob=await gh("/git/blobs",{method:"POST",body:JSON.stringify({content:dataUrl.split(",")[1],encoding:"base64"})});
-      tree.push({path,mode:"100644",type:"blob",sha:blob.sha});
-    }
-    tree.push({path:"data.json",mode:"100644",type:"blob",content:JSON.stringify(next,null,1)+"\n"});
-    if(removePaths.length){
-      const cur=await gh(`/git/trees/${base.tree.sha}?recursive=1`);
-      const have=new Set((cur.tree||[]).map(t=>t.path));
-      removePaths.filter(p=>safePath(p)&&have.has(p)).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
+    for(const f of files){
+      if(f.delete) tree.push({path:f.path,mode:"100644",type:"blob",sha:null});
+      else if(f.b64!=null){ const blob=await gh("/git/blobs",{method:"POST",body:JSON.stringify({content:f.b64,encoding:"base64"})}); tree.push({path:f.path,mode:"100644",type:"blob",sha:blob.sha}); }
+      else tree.push({path:f.path,mode:"100644",type:"blob",content:f.content});
     }
     const t=await gh("/git/trees",{method:"POST",body:JSON.stringify({base_tree:base.tree.sha,tree})});
     const c=await gh("/git/commits",{method:"POST",body:JSON.stringify({message,tree:t.sha,parents:[head]})});
     try{ await gh(`/git/refs/heads/${S.branch}`,{method:"PATCH",body:JSON.stringify({sha:c.sha})}); return; }
-    catch(e){ if(e.status===422&&attempt===0) continue; throw e; }
+    catch(e){ if(e.status===422&&attempt<2) continue; throw e; }
   }
 }
-let saving=false;
-async function save(next,{newImages=[],remove=[],msg="Đã lưu",commitMsg="Cập nhật sổ hạt"}={}){
-  if(!S.edit||saving) return false;
-  saving=true; const ov=document.createElement("div"); ov.className="saving"; ov.innerHTML="<div>Đang lưu lên GitHub…</div>"; document.body.appendChild(ov);
-  try{
-    await commit(next,newImages,remove,commitMsg);
-    newImages.forEach(([p,d])=>LOCAL.set(p,d));
-    DATA=next; render(); toast(msg+". Trang công khai cập nhật sau khoảng 1 phút.",5000); return true;
-  }catch(e){
-    if(e.status===401){ logout(); toast("Mã truy cập đã hết hạn hoặc bị thu hồi. Hãy đăng nhập lại."); }
-    else if(e.status===403||e.status===404) toast("Mã truy cập không có quyền ghi vào repo này. Kiểm tra quyền Contents: Read and write.");
-    else if(e.status===422) toast("Repo vừa thay đổi ở nơi khác. Tải lại trang rồi thử lại.");
-    else toast("Chưa lưu được. Kiểm tra kết nối rồi thử lại.");
-    return false;
-  }finally{ saving=false; ov.remove(); }
+function ghError(e){
+  if(e.status===401){ logout(); toast("Mã truy cập đã hết hạn hoặc bị thu hồi. Hãy đăng nhập lại."); }
+  else if(e.status===403||e.status===404) toast("Mã truy cập không có quyền ghi vào repo này. Kiểm tra quyền Contents: Read and write.");
+  else if(e.status===422) toast("Repo vừa thay đổi ở nơi khác. Tải lại trang rồi thử lại.");
+  else toast("Chưa lưu được. Kiểm tra kết nối rồi thử lại.");
 }
 
-/* ---------- load ---------- */
-async function load(){
-  try{
-    let txt;
-    if(S.edit){ txt=await gh(`/contents/data.json?ref=${S.branch}`,{raw:true,headers:{"Accept":"application/vnd.github.raw+json"}}); }
-    else { const r=await fetch("data.json?t="+Date.now(),{cache:"no-store"}); if(r.status===404){ txt="{}"; } else if(!r.ok) throw new Error(r.status); else txt=await r.text(); }
-    const d=JSON.parse(txt||"{}"); DATA={profile:d.profile||{},beans:Array.isArray(d.beans)?d.beans:[]}; S.error=null;
-  }catch(e){ if(e.status===404) DATA={profile:{},beans:[]}; else S.error="Không tải được dữ liệu. Thử tải lại trang."; }
-  S.loaded=true; render();
+/* ================= Worker (community) ================= */
+async function worker(method,path,body,key){
+  if(!CFG.workerUrl) throw Object.assign(new Error("no worker"),{code:"no_worker"});
+  const r=await fetch(CFG.workerUrl.replace(/\/$/,"")+path,{method,headers:{"Content-Type":"application/json",...(key?{"X-Edit-Key":key}:{})},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok) throw Object.assign(new Error(j.error||"http "+r.status),{code:j.error||"http",status:r.status});
+  return j;
+}
+function workerError(e){
+  const map={captcha:"Hãy hoàn thành bước xác minh chống spam rồi thử lại.",bad_key:"Link sửa không đúng. Hãy mở lại đúng link sửa sổ của bạn.",no_key:"Thiếu link sửa sổ.",
+    name_required:"Hãy nhập tên hiển thị.",too_large:"Dữ liệu gửi lên quá lớn. Thử ảnh nhỏ hơn.",image_too_large:"Ảnh quá lớn. Thử ảnh khác.",bad_image:"Ảnh không hợp lệ. Thử ảnh JPG hoặc PNG.",
+    too_many_images:"Mỗi lần lưu tối đa 6 ảnh mới.",conflict:"Máy chủ đang bận. Thử lại sau vài giây.",not_found:"Không tìm thấy sổ này.",no_worker:"Tính năng tạo sổ chưa được bật.",origin:"Trang này chưa được phép gửi tới máy chủ."};
+  toast(map[e.code]||"Chưa lưu được. Kiểm tra kết nối rồi thử lại.");
 }
 
-/* ---------- render ---------- */
-function photo(p,alt,cls=""){ const s=imgSrc(p); return s?`<img ${cls} loading="lazy" alt="${esc(alt)}" src="${esc(s)}" data-p="${esc(p)}">`:""; }
-function card(b){
-  const has=!!imgSrc(b.photo);
+/* ================= contexts: whose book is on screen ================= */
+function refs(d){ return [d.profile.avatar,...d.beans.map(b=>b.photo)].filter(Boolean); }
+function ownerCtx(){
+  return { kind:"owner", data:OWNER.data, canEdit:S.edit,
+    async commit(next,pending,msg,commitMsg){
+      const stamp=Date.now().toString(36), files=[], local=[];
+      next=JSON.parse(JSON.stringify(next));
+      for(const p of pending){
+        const path=p.slot==="avatar"?`images/avatar-${stamp}.jpg`:`images/${p.slot}-${stamp}.jpg`;
+        if(p.slot==="avatar") next.profile.avatar=path; else { const b=next.beans.find(x=>x.id===p.slot); if(b) b.photo=path; }
+        files.push({path,b64:p.dataUrl.split(",")[1]}); local.push([path,p.dataUrl]);
+      }
+      const keep=new Set(refs(next)); const stale=refs(OWNER.data).filter(p=>!keep.has(p)&&ownerPathOk(p));
+      const done=busy("Đang lưu lên GitHub…");
+      try{
+        await ghCommit(async(head,treeSha)=>{
+          let del=[]; if(stale.length){ const cur=await gh(`/git/trees/${treeSha}?recursive=1`); const have=new Set((cur.tree||[]).map(t=>t.path)); del=stale.filter(p=>have.has(p)); }
+          return {message:commitMsg,files:[...files,...del.map(path=>({path,delete:true})),{path:"data.json",content:JSON.stringify(next,null,1)+"\n"}]};
+        });
+        local.forEach(([p,d])=>LOCAL.set(p,d)); OWNER.data=next; render(); toast(msg+". Trang công khai cập nhật sau khoảng 1 phút.",5000); return true;
+      }catch(e){ ghError(e); return false; } finally{ done(); }
+    } };
+}
+function commCtx(id){
+  const entry=PROFILES.get(id), doc=entry&&entry.doc; if(!doc) return null;
+  const key=KEYS[id];
+  return { kind:"comm", id, key, data:{profile:{name:doc.name,bio:doc.bio,avatar:doc.avatar},beans:doc.beans||[]}, canEdit:!!key&&!!CFG.workerUrl, doc,
+    async commit(next,pending,msg){
+      const body={profile:{...next.profile},beans:JSON.parse(JSON.stringify(next.beans)),images:{}};
+      for(const p of pending){
+        if(p.slot==="avatar"){ body.profile.avatar="new:avatar"; body.images.avatar=p.dataUrl; }
+        else { const b=body.beans.find(x=>x.id===p.slot); if(b){ b.photo="new:"+b.id; body.images[b.id]=p.dataUrl; } }
+      }
+      const done=busy("Đang lưu…");
+      try{
+        const res=await worker("PUT",`/profiles/${id}`,body,key);
+        const nd=res.profile;
+        for(const p of pending){ const path=p.slot==="avatar"?nd.avatar:(nd.beans.find(b=>b.id===p.slot)||{}).photo; if(path) LOCAL.set(path,p.dataUrl); }
+        PROFILES.set(id,{doc:nd}); patchIndex(nd); render(); toast(msg+". Mọi người thấy bản mới sau khoảng 1 phút.",5000); return true;
+      }catch(e){ workerError(e); return false; } finally{ done(); }
+    } };
+}
+function patchIndex(doc){
+  if(!COMM.index) return;
+  const list=(COMM.index.profiles||[]).filter(p=>p.id!==doc.id);
+  list.unshift({id:doc.id,name:doc.name,avatar:doc.avatar,count:(doc.beans||[]).length,createdAt:doc.createdAt,updatedAt:doc.updatedAt});
+  COMM.index={profiles:list};
+}
+function currentCtx(){ const r=S.route; return r.name==="owner"?ownerCtx():r.name==="profile"?commCtx(r.id):null; }
+
+/* ================= routing ================= */
+function parseHash(){
+  const h=decodeURIComponent(location.hash.replace(/^#\/?/,""));
+  let m;
+  if((m=h.match(/^u\/([a-z0-9]{10})\/k\/([A-Za-z0-9_-]{20,})$/))){ KEYS[m[1]]=m[2]; saveKeys(); history.replaceState(null,"",`#u/${m[1]}`); return {name:"profile",id:m[1],fromLink:true}; }
+  if((m=h.match(/^u\/([a-z0-9]{10})$/))) return {name:"profile",id:m[1]};
+  if(h==="cong-dong") return {name:"community"};
+  if(h==="tao-so") return {name:"create"};
+  if(h==="quan-tri") return {name:"admin"};
+  return {name:"owner"};
+}
+function go(){ S.route=parseHash(); S.filter="Tất cả"; S.del=null; S.delProfile=false; closeSheet(); render(); ensureData(); window.scrollTo(0,0); }
+window.addEventListener("hashchange",go);
+async function ensureData(){
+  const r=S.route;
+  if(r.name==="owner"&&!OWNER.loaded) loadOwner();
+  if(r.name==="community"&&!COMM.loaded) loadIndex();
+  if(r.name==="profile"&&!PROFILES.has(r.id)) loadProfile(r.id);
+  if(r.name==="admin"&&S.edit) loadAdmin();
+}
+async function loadOwner(){
+  try{ const d=S.edit?await ghJson("data.json"):await fetchJson("data.json"); OWNER.data={profile:(d&&d.profile)||{},beans:Array.isArray(d&&d.beans)?d.beans:[]}; OWNER.error=null; }
+  catch(e){ OWNER.error="Không tải được dữ liệu. Thử tải lại trang."; }
+  OWNER.loaded=true; render();
+}
+async function loadIndex(){
+  try{ const d=await fetchJson("community/index.json"); COMM.index={profiles:Array.isArray(d&&d.profiles)?d.profiles:[]}; COMM.error=null; }
+  catch(e){ COMM.error="Không tải được danh sách. Thử tải lại trang."; }
+  COMM.loaded=true; render();
+}
+async function loadProfile(id){
+  PROFILES.set(id,{loading:true}); render();
+  try{
+    let d=S.edit?await ghJson(`community/${id}/profile.json`):await fetchJson(`community/${id}/profile.json`);
+    if(!d&&!S.edit){ try{ const r=await fetch(rawUrl(`community/${id}/profile.json`)+"?t="+Date.now()); if(r.ok) d=await r.json(); }catch(_){} }
+    PROFILES.set(id,d?{doc:d}:{error:"Không tìm thấy sổ này. Nếu vừa tạo, đợi khoảng 1 phút rồi tải lại."});
+  }catch(e){ PROFILES.set(id,{error:"Không tải được sổ này. Thử tải lại trang."}); }
+  render();
+}
+async function loadAdmin(){
+  COMM.adminIndex=null; render();
+  try{ const d=await ghJson("community/index.json"); COMM.adminIndex={profiles:Array.isArray(d&&d.profiles)?d.profiles:[]}; }
+  catch(e){ COMM.adminIndex={error:true,profiles:[]}; }
+  render();
+}
+
+/* ================= render ================= */
+function photoTag(p,alt,attrs=""){ const s=imgUrl(p); return s?`<img ${attrs} loading="lazy" alt="${esc(alt)}" src="${esc(s)}" data-p="${esc(p)}">`:""; }
+function card(b,ctx){
+  const has=!!imgUrl(b.photo);
   return `<article class="bean">
-    <button class="ph" ${has?`data-act="zoom" data-id="${esc(b.id)}" aria-label="Xem ảnh lớn">${photo(b.photo,"Ảnh hạt "+b.name)}`:`tabindex="-1" aria-hidden="true"><span class="noimg">${beanSvg}</span>`}</button>
+    <button class="ph" ${has?`data-act="zoom" aria-label="Xem ảnh lớn">${photoTag(b.photo,"Ảnh hạt "+b.name)}`:`tabindex="-1" aria-hidden="true"><span class="noimg">${beanSvg}</span>`}</button>
     <div class="body">
       <h3>${esc(b.name)}</h3>
       ${b.origin?`<div class="origin">${esc(b.origin)}</div>`:""}
@@ -277,7 +412,7 @@ function card(b){
       <div class="price">${b.price?`<b>${vnd(b.price)}</b><span>/ ${esc(b.unit||"250g")}</span>`:`<span>Chưa có giá</span>`}</div>
       ${(()=>{ const p=per100(b); return p!=null&&grams(b.unit||"250g")!==100?`<div class="per100">≈ ${vnd(Math.round(p/100)*100)} / 100g</div>`:""; })()}
       <div class="foot">${fmtDate(b)}</div>
-      ${S.edit?(S.del===b.id?`<div class="acts2"><span style="font-size:13px;align-self:center">Xoá hạt này?</span><button class="btn sm primary" data-act="del" data-id="${esc(b.id)}">Xoá</button><button class="btn sm" data-act="nodel">Giữ</button></div>`:`<div class="acts2"><button class="btn sm" data-act="edit" data-id="${esc(b.id)}">Sửa</button><button class="btn sm ghost" data-act="askdel" data-id="${esc(b.id)}">Xoá</button></div>`):""}
+      ${ctx.canEdit?(S.del===b.id?`<div class="acts2"><span style="font-size:13px;align-self:center">Xoá hạt này?</span><button class="btn sm primary" data-act="del" data-id="${esc(b.id)}">Xoá</button><button class="btn sm" data-act="nodel">Giữ</button></div>`:`<div class="acts2"><button class="btn sm" data-act="edit" data-id="${esc(b.id)}">Sửa</button><button class="btn sm ghost" data-act="askdel" data-id="${esc(b.id)}">Xoá</button></div>`):""}
     </div></article>`;
 }
 function toolbar(list){
@@ -287,34 +422,120 @@ function toolbar(list){
   const sort=list.length>1?`<label class="sortbox">Sắp xếp<select id="sortSel">${Object.entries(SORTS).map(([k,v])=>`<option value="${k}" ${S.sort===k?"selected":""}>${v}</option>`).join("")}</select></label>`:"";
   return chips||sort?`<div class="toolbar">${chips}${sort}</div>`:"";
 }
-function view(list){
+function sorted(list){
   const r=S.filter==="Tất cả"?list.slice():list.filter(b=>b.process===S.filter);
   if(S.sort==="new") return r.sort(byDate);
   return r.sort((a,b)=>{ const x=per100(a),y=per100(b); if(x==null&&y==null) return byDate(a,b); if(x==null) return 1; if(y==null) return -1; return S.sort==="cheap"?x-y:y-x; });
 }
-function render(){
-  document.getElementById("editbar").hidden=!S.edit;
-  document.getElementById("foot").innerHTML=S.edit?"":`<button class="linkbtn" data-act="login">Chủ sổ đăng nhập để chỉnh sửa</button>`;
-  if(!S.loaded) return;
-  if(S.error){ $app.innerHTML=`<div class="empty"><h3>Chưa mở được sổ</h3><p>${esc(S.error)}</p></div>`; return; }
-  const p=DATA.profile, list=DATA.beans;
+function bookHtml(ctx,top=""){
+  const p=ctx.data.profile, list=ctx.data.beans;
   const origins=new Set(list.map(b=>(b.origin||"").trim().toLowerCase()).filter(Boolean)).size;
   const ps=list.map(per100).filter(x=>x!=null); const avg=ps.length?Math.round(ps.reduce((a,b)=>a+b,0)/ps.length/1000)*1000:0;
-  const name=p.name||(S.edit?"Thêm tên của bạn":"Sổ hạt cà phê");
-  document.title=p.name||"Sổ Hạt";
-  const av=imgSrc(p.avatar);
-  $app.innerHTML=`
+  const name=p.name||(ctx.canEdit?"Thêm tên của bạn":"Sổ hạt cà phê");
+  const av=imgUrl(p.avatar);
+  return `${top}
   <section class="prof">
     ${av?`<img class="avatar" src="${esc(av)}" data-p="${esc(p.avatar)}" alt="">`:`<img class="avatar" src="${defAvatar}" alt="">`}
-    <div style="min-width:0"><h1>${esc(name)}</h1>${p.bio?`<p>${esc(p.bio)}</p>`:(S.edit?`<p>Viết vài dòng về gu cà phê của bạn trong phần Sửa hồ sơ.</p>`:"")}</div>
-    ${S.edit?`<div class="acts"><button class="btn" data-act="prof">Sửa hồ sơ</button><button class="btn primary" data-act="new">+ Thêm hạt</button></div>`:""}
+    <div style="min-width:0"><h1>${esc(name)}</h1>${p.bio?`<p>${esc(p.bio)}</p>`:(ctx.canEdit?`<p>Viết vài dòng về gu cà phê của bạn trong phần Sửa hồ sơ.</p>`:"")}</div>
+    ${ctx.canEdit?`<div class="acts"><button class="btn" data-act="prof">Sửa hồ sơ</button><button class="btn primary" data-act="new">+ Thêm hạt</button></div>`:""}
   </section>
   <div class="stats"><div><b>${list.length}</b><span>loại hạt đã thử</span></div><div><b>${origins}</b><span>vùng trồng</span></div><div><b style="font-family:var(--f-mono)">${avg?vnd(avg):"–"}</b><span>giá trung bình / 100g</span></div></div>
-  ${list.length?toolbar(list)+`<div class="grid">${view(list).map(card).join("")}</div>`
-    :`<div class="empty"><h3>Chưa có hạt nào</h3><p>${S.edit?"Chụp ảnh túi hạt, ghi tên, sơ chế, vùng trồng, độ rang và giá mua.":"Chủ sổ chưa đăng loại hạt nào."}</p>${S.edit?`<button class="btn primary" data-act="new">+ Thêm hạt</button>`:""}</div>`}`;
+  ${list.length?toolbar(list)+`<div class="grid">${sorted(list).map(b=>card(b,ctx)).join("")}</div>`
+    :`<div class="empty"><h3>Chưa có hạt nào</h3><p>${ctx.canEdit?"Chụp ảnh túi hạt, ghi tên, sơ chế, vùng trồng, độ rang và giá mua.":"Chủ sổ chưa đăng loại hạt nào."}</p>${ctx.canEdit?`<button class="btn primary" data-act="new">+ Thêm hạt</button>`:""}</div>`}`;
+}
+function myBookId(){ return Object.keys(KEYS).find(id=>/^[a-z0-9]{10}$/.test(id)); }
+function renderNav(){
+  const r=S.route.name, mine=myBookId(), ownerName=OWNER.data.profile.name;
+  const items=[["#","owner",ownerName?ownerName.replace(/^Sổ hạt của\s+/i,"Sổ của "):"Sổ chủ trang"],["#cong-dong","community","Cộng đồng"]];
+  if(CFG.workerUrl) items.push(mine?[`#u/${mine}`,"mine","Sổ của tôi"]:["#tao-so","create","Tạo sổ của bạn"]);
+  if(S.edit) items.push(["#quan-tri","admin","Quản trị"]);
+  const cur=r==="profile"&&S.route.id===mine?"mine":r;
+  document.getElementById("nav").innerHTML=items.map(([h,k,t])=>`<a href="${h}" aria-current="${k===cur}">${esc(t)}</a>`).join("");
+  document.getElementById("foot").innerHTML=S.edit?`<span>Đang đăng nhập quản trị</span><button class="linkbtn" data-act="logout">Thoát</button>`:`<button class="linkbtn" data-act="login">Chủ trang đăng nhập</button>`;
+}
+function render(){
+  renderNav();
+  const r=S.route;
+  if(r.name==="owner"){
+    if(!OWNER.loaded){ $app.innerHTML=`<p class="muted">Đang tải sổ hạt…</p>`; return; }
+    if(OWNER.error){ $app.innerHTML=`<div class="empty"><h3>Chưa mở được sổ</h3><p>${esc(OWNER.error)}</p></div>`; return; }
+    document.title=OWNER.data.profile.name||"Sổ Hạt";
+    $app.innerHTML=bookHtml(ownerCtx(), S.edit?`<p class="notice">Bạn đang chỉnh sửa sổ chính của trang.</p>`:"");
+  }
+  else if(r.name==="community") renderCommunity();
+  else if(r.name==="profile") renderProfile();
+  else if(r.name==="create") renderCreate();
+  else if(r.name==="admin") renderAdmin();
+}
+function renderCommunity(){
+  document.title="Cộng đồng · Sổ Hạt";
+  const head=`<div class="pgh"><h1>Cộng đồng</h1><p>Sổ hạt của những người yêu cà phê khác. Ai cũng có thể tạo sổ riêng, không cần tài khoản.</p></div>`;
+  const cta=CFG.workerUrl?(myBookId()?`<p style="margin:0 0 18px"><a class="btn" href="#u/${myBookId()}">Mở sổ của tôi</a></p>`:`<p style="margin:0 0 18px"><a class="btn primary" href="#tao-so">+ Tạo sổ của bạn</a></p>`):"";
+  if(!COMM.loaded){ $app.innerHTML=head+`<p class="muted">Đang tải…</p>`; return; }
+  if(COMM.error){ $app.innerHTML=head+`<div class="empty"><p>${esc(COMM.error)}</p></div>`; return; }
+  const list=(COMM.index.profiles||[]).filter(p=>p&&/^[a-z0-9]{10}$/.test(p.id));
+  $app.innerHTML=head+cta+(list.length?`<div class="people">${list.map(p=>{ const av=imgUrl(p.avatar);
+    return `<a class="person" href="#u/${p.id}">${av?`<img src="${esc(av)}" data-p="${esc(p.avatar)}" alt="">`:`<img src="${defAvatar}" alt="">`}<div style="min-width:0"><b>${esc(p.name||"Không tên")}</b><span>${+p.count||0} loại hạt · cập nhật ${esc(fmtTime(p.updatedAt))}</span></div></a>`; }).join("")}</div>`
+    :`<div class="empty"><h3>Chưa có ai tạo sổ</h3><p>Hãy là người đầu tiên chia sẻ những loại hạt bạn đã thử.</p></div>`);
+}
+function renderProfile(){
+  const id=S.route.id, e=PROFILES.get(id);
+  if(!e||e.loading){ $app.innerHTML=`<p class="muted">Đang tải sổ…</p>`; return; }
+  if(e.error){ $app.innerHTML=`<div class="empty"><h3>Chưa mở được sổ</h3><p>${esc(e.error)}</p><a class="btn" href="#cong-dong">Về Cộng đồng</a></div>`; return; }
+  const ctx=commCtx(id); document.title=(ctx.data.profile.name||"Sổ hạt")+" · Sổ Hạt";
+  let top="";
+  if(ctx.canEdit){
+    top=`<div class="panel"><h3>Đây là sổ của bạn</h3>
+      <p class="help" style="margin:0">Giữ link dưới đây để sửa sổ trên máy khác. Ai có link này đều sửa được sổ, nên đừng chia sẻ công khai. Để khoe sổ với bạn bè, gửi link thường: <b>${esc(location.origin+location.pathname+"#u/"+id)}</b></p>
+      <div class="keybox"><input readonly value="${esc(editLink(id,ctx.key))}" aria-label="Link sửa sổ"><button class="btn sm" data-act="copykey">Sao chép link sửa</button></div>
+      <div class="acts2">${S.delProfile?`<span style="font-size:13px;align-self:center">Xoá toàn bộ sổ và ảnh? Không khôi phục được.</span><button class="btn sm primary" data-act="delprofile">Xoá sổ</button><button class="btn sm" data-act="nodelprofile">Giữ lại</button>`:`<button class="btn sm ghost" data-act="askdelprofile">Xoá sổ của tôi</button>`}</div></div>`;
+  } else if(S.edit){
+    top=`<p class="notice">Bạn đang xem với quyền quản trị. Có thể xoá sổ này trong trang Quản trị.</p>`;
+  }
+  $app.innerHTML=bookHtml(ctx,top);
+}
+let tsToken="", tsWidget=null;
+function renderCreate(){
+  document.title="Tạo sổ · Sổ Hạt";
+  if(!CFG.workerUrl){ $app.innerHTML=`<div class="empty"><h3>Chưa mở tính năng tạo sổ</h3><p>Chủ trang chưa bật tính năng này.</p></div>`; return; }
+  const mine=myBookId();
+  if(mine){ $app.innerHTML=`<div class="empty"><h3>Bạn đã có sổ trên trình duyệt này</h3><p>Mỗi trình duyệt giữ link sửa của sổ bạn đã tạo.</p><a class="btn primary" href="#u/${mine}">Mở sổ của tôi</a></div>`; return; }
+  $app.innerHTML=`<div class="pgh"><h1>Tạo sổ hạt của bạn</h1><p>Không cần tài khoản. Sau khi tạo, bạn nhận một link sửa riêng để quay lại thêm hạt bất cứ lúc nào. Sổ của bạn hiện công khai ở mục Cộng đồng.</p></div>
+  <form class="formcard" id="createForm">
+    <div class="field"><span class="lbl">Ảnh đại diện (tuỳ chọn)</span><label class="drop round" id="cav" for="cav-file">Chọn ảnh</label><input type="file" id="cav-file" accept="image/*" hidden></div>
+    <div class="field"><label class="lbl" for="c-name">Tên hiển thị</label><input id="c-name" required maxlength="60" placeholder="Ví dụ: Minh – mê pour-over"></div>
+    <div class="field"><label class="lbl" for="c-bio">Giới thiệu (tuỳ chọn)</label><textarea id="c-bio" maxlength="600" placeholder="Gu cà phê của bạn, bạn hay pha thế nào…"></textarea></div>
+    ${CFG.turnstileSiteKey?`<div class="ts-box" id="ts"></div>`:""}
+    <div><button type="submit" class="btn primary">Tạo sổ</button></div>
+  </form>`;
+  F={kind:"create",pic:null,picNew:null,busy:false};
+  const draw=()=>{ const d=document.getElementById("cav"); if(d) d.innerHTML=F&&F.pic?`<img src="${esc(F.pic)}" alt="">`:F&&F.busy?"Đang nén…":"Chọn ảnh"; };
+  wireDrop("cav",async f=>{ F.busy=true; draw(); try{ F.picNew=await compress(f,[480,360],120000); F.pic=F.picNew; }catch(e){ toast("Không đọc được ảnh này."); } F.busy=false; draw(); });
+  if(CFG.turnstileSiteKey) mountTurnstile();
+}
+function mountTurnstile(){
+  const draw=()=>{ const el=document.getElementById("ts"); if(!el||!window.turnstile) return; tsToken=""; tsWidget=window.turnstile.render(el,{sitekey:CFG.turnstileSiteKey,callback:t=>{tsToken=t;},"expired-callback":()=>{tsToken="";}}); };
+  if(window.turnstile) return draw();
+  if(!document.getElementById("ts-script")){ window.onTsLoad=draw; const s=document.createElement("script"); s.id="ts-script"; s.src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTsLoad&render=explicit"; s.async=true; document.head.appendChild(s); }
+}
+function renderAdmin(){
+  document.title="Quản trị · Sổ Hạt";
+  if(!S.edit){ $app.innerHTML=`<div class="empty"><h3>Cần đăng nhập</h3><p>Trang quản trị chỉ dành cho chủ trang.</p><button class="btn primary" data-act="login">Đăng nhập bằng mã GitHub</button></div>`; return; }
+  const head=`<div class="pgh"><h1>Quản trị</h1><p>Các sổ do người dùng tạo. Dữ liệu đọc trực tiếp từ repo, mới nhất trước.</p></div>`;
+  const ai=COMM.adminIndex;
+  if(!ai){ $app.innerHTML=head+`<p class="muted">Đang tải…</p>`; return; }
+  if(ai.error){ $app.innerHTML=head+`<div class="empty"><p>Không đọc được danh sách. Thử tải lại.</p><button class="btn" data-act="reloadadmin">Tải lại</button></div>`; return; }
+  const list=ai.profiles.filter(p=>p&&/^[a-z0-9]{10}$/.test(p.id)).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+  const total=list.reduce((s,p)=>s+(+p.count||0),0), week=list.filter(p=>Date.now()-(p.createdAt||0)<7*864e5).length;
+  $app.innerHTML=head+`<div class="statrow"><div><b>${list.length}</b><span>sổ người dùng</span></div><div><b>${total}</b><span>loại hạt đã đăng</span></div><div><b>${week}</b><span>sổ mới trong 7 ngày</span></div><div style="display:flex;align-items:center"><button class="btn sm" data-act="reloadadmin">Tải lại</button></div></div>`+
+  (!CFG.workerUrl?`<p class="notice">Tính năng tạo sổ đang tắt vì <b>config.json</b> chưa có địa chỉ Worker.</p>`:"")+
+  (list.length?`<div class="tablewrap"><table class="adm"><thead><tr><th></th><th>Tên</th><th>Số hạt</th><th>Tạo lúc</th><th>Cập nhật</th><th></th></tr></thead><tbody>${list.map(p=>{ const av=imgUrl(p.avatar);
+    return `<tr><td>${av?`<img src="${esc(av)}" data-p="${esc(p.avatar)}" alt="">`:`<img src="${defAvatar}" alt="">`}</td><td><b>${esc(p.name||"Không tên")}</b><div class="muted" style="font-size:12px;font-family:var(--f-mono)">${esc(p.id)}</div></td><td class="num">${+p.count||0}</td><td class="num">${esc(fmtTime(p.createdAt))}</td><td class="num">${esc(fmtTime(p.updatedAt))}</td>
+    <td style="white-space:nowrap">${S.del==="p:"+p.id?`<button class="btn sm primary" data-act="admdel" data-id="${p.id}">Xoá hẳn</button> <button class="btn sm" data-act="nodel">Huỷ</button>`:`<a class="btn sm" href="#u/${p.id}">Xem</a> <button class="btn sm ghost" data-act="admask" data-id="${p.id}">Xoá</button>`}</td></tr>`; }).join("")}</tbody></table></div>`
+    :`<div class="empty"><h3>Chưa có sổ nào</h3><p>Khi có người tạo sổ, sổ sẽ hiện ở đây.</p></div>`);
 }
 
-/* ---------- images ---------- */
+/* ================= images ================= */
 async function decode(f){ if(window.createImageBitmap){ try{ return await createImageBitmap(f,{imageOrientation:"from-image"}); }catch(e){} }
   return new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src=URL.createObjectURL(f); }); }
 async function compress(f,sizes,limit){ const s=await decode(f), cv=document.createElement("canvas"), cx=cv.getContext("2d");
@@ -323,25 +544,24 @@ async function compress(f,sizes,limit){ const s=await decode(f), cv=document.cre
     for(const q of [.85,.75,.65]){ const u=cv.toDataURL("image/jpeg",q); if(u.length<limit) return u; } }
   throw new Error("big"); }
 function wireDrop(id,onFile){
-  const d=document.getElementById(id), inp=document.getElementById(id+"-file");
+  const d=document.getElementById(id), inp=document.getElementById(id+"-file"); if(!d||!inp) return;
   inp.addEventListener("change",()=>{ if(inp.files[0]) onFile(inp.files[0]); inp.value=""; });
   d.addEventListener("dragover",e=>{e.preventDefault();d.classList.add("over");});
   d.addEventListener("dragleave",()=>d.classList.remove("over"));
   d.addEventListener("drop",e=>{e.preventDefault();d.classList.remove("over"); const f=e.dataTransfer&&e.dataTransfer.files[0]; if(f) onFile(f);});
 }
 
-/* ---------- sheets ---------- */
+/* ================= sheets ================= */
 let F=null;
 function sheet(title,inner,submit){
   document.getElementById("sheetRoot").innerHTML=`<div class="scrim" data-act="close"></div>
   <form class="sheet" id="f" aria-label="${esc(title)}"><div class="sheet-h"><h2>${esc(title)}</h2><button type="button" class="btn ghost sm" data-act="close" style="margin-left:auto">Đóng</button></div>
   <div class="sheet-b">${inner}</div><div class="sheet-f"><button type="button" class="btn" data-act="close">Huỷ</button><button type="submit" class="btn primary">${esc(submit)}</button></div></form>`;
 }
-function closeSheet(){ document.getElementById("sheetRoot").innerHTML=""; F=null; }
-
+function closeSheet(keepCreate){ document.getElementById("sheetRoot").innerHTML=""; if(!(keepCreate&&F&&F.kind==="create")) F=null; }
 function openLogin(){
   F={kind:"login"};
-  sheet("Đăng nhập chỉnh sửa",`
+  sheet("Chủ trang đăng nhập",`
     <div class="field"><label class="lbl" for="l-token">Mã truy cập GitHub</label><input id="l-token" type="password" autocomplete="off" required placeholder="github_pat_…"></div>
     <p class="err" id="l-err" hidden></p>
     <div class="help">Mã chỉ lưu trên trình duyệt này và chỉ dùng để ghi vào repo <b>${esc(GH.owner)}/${esc(GH.repo)}</b>. Cách tạo:
@@ -350,11 +570,11 @@ function openLogin(){
         <li>Repository access: <b>Only select repositories</b>, chọn <b>${esc(GH.repo)}</b>.</li>
         <li>Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>
         <li>Bấm Generate token, sao chép mã và dán vào ô trên.</li>
-      </ol></div>`,"Kết nối");
+      </ol></div>`,"Đăng nhập");
   setTimeout(()=>document.getElementById("l-token")?.focus(),50);
 }
 function openBean(b){
-  F=b?{...b,pic:imgSrc(b.photo)||null,picNew:null}:{id:null,name:"",date:today(),process:"",origin:"",roast:3,roastText:"",price:0,unit:"250g",photo:"",pic:null,picNew:null};
+  F=b?{...b,pic:imgUrl(b.photo)||null,picNew:null}:{id:null,name:"",date:today(),process:"",origin:"",roast:3,roastText:"",price:0,unit:"250g",photo:"",pic:null,picNew:null};
   F.kind="bean"; F.busy=false; if(!F.date) F.date=dayOf(F);
   const chip=(k,v,on)=>`<button type="button" class="chip" data-chip="${k}" data-v="${esc(v)}" aria-pressed="${on}">${esc(v)}</button>`;
   const cProc=F.process&&!PROCESS.includes(F.process), cUnit=!UNITS.includes(F.unit);
@@ -380,20 +600,20 @@ function openBean(b){
 function drawDrop(){ const d=document.getElementById("drop"); if(!d||!F) return;
   d.innerHTML=F.pic?`<img src="${esc(F.pic)}" alt=""><button type="button" class="btn sm rm" data-act="rmpic">Bỏ ảnh</button>${F.busy?`<span class="busy">Đang nén…</span>`:""}`
     :F.busy?`<span class="muted">Đang nén ảnh…</span>`:`<span><b>Chọn ảnh túi hạt</b><br><span class="muted" style="font-size:13px">hoặc kéo thả ảnh vào đây</span></span>`; }
-function openProfile(){
-  const p=DATA.profile; F={kind:"prof",pic:imgSrc(p.avatar)||null,picNew:null,busy:false};
+function openProfileSheet(ctx){
+  const p=ctx.data.profile; F={kind:"prof",pic:imgUrl(p.avatar)||null,picNew:null,busy:false};
   sheet("Sửa hồ sơ",`
     <div class="field"><span class="lbl">Ảnh đại diện</span><label class="drop round" id="av" for="av-file"></label><input type="file" id="av-file" accept="image/*" hidden></div>
-    <div class="field"><label class="lbl" for="p-name">Tên hiển thị</label><input id="p-name" maxlength="60" value="${esc(p.name||"")}" placeholder="Tên của bạn"></div>
+    <div class="field"><label class="lbl" for="p-name">Tên hiển thị</label><input id="p-name" maxlength="60" ${ctx.kind==="comm"?"required":""} value="${esc(p.name||"")}" placeholder="Tên của bạn"></div>
     <div class="field"><label class="lbl" for="p-bio">Giới thiệu</label><textarea id="p-bio" maxlength="600" placeholder="Ví dụ: Mê hạt Natural và Anaerobic, pha pour-over mỗi sáng.">${esc(p.bio||"")}</textarea></div>`,"Lưu hồ sơ");
   const draw=()=>{ const d=document.getElementById("av"); if(d) d.innerHTML=F.pic?`<img src="${esc(F.pic)}" alt="">`:F.busy?"Đang nén…":"Chọn ảnh"; };
   draw(); wireDrop("av",async f=>{ F.busy=true; draw(); try{ F.picNew=await compress(f,[480,360],120000); F.pic=F.picNew; }catch(e){ toast("Không đọc được ảnh này."); } F.busy=false; draw(); });
 }
-function logout(){ S.edit=false; S.token=null; try{ localStorage.removeItem(TOKEN_KEY); }catch(e){} render(); }
+function logout(){ S.edit=false; S.token=null; try{ localStorage.removeItem(TOKEN_KEY); }catch(e){} OWNER.loaded=false; ensureData(); render(); }
 
-/* ---------- events ---------- */
+/* ================= events ================= */
 document.addEventListener("change",e=>{ if(e.target.id==="sortSel"){ S.sort=e.target.value; try{localStorage.setItem("sohat-sort",S.sort)}catch(_){} render(); } });
-document.addEventListener("click",ev=>{
+document.addEventListener("click",async ev=>{
   const c=ev.target.closest("[data-chip]");
   if(c&&F&&F.kind==="bean"){ const k=c.dataset.chip; let v=c.dataset.v;
     const clr=id=>{ const el=document.getElementById(id); if(el){ el.value=""; el.classList.remove("on"); } };
@@ -401,59 +621,106 @@ document.addEventListener("click",ev=>{
     F[k]=(k==="process"&&F[k]===v)?"":v;
     c.parentElement.querySelectorAll("[data-chip]").forEach(b=>b.setAttribute("aria-pressed",String((k==="roast"?+b.dataset.v:b.dataset.v)===F[k]))); return; }
   const a=ev.target.closest("[data-act]"); if(!a) return; const act=a.dataset.act;
+  const ctx=currentCtx();
   if(act==="filter"){ S.filter=a.dataset.v; render(); }
-  else if(act==="zoom"){ const b=DATA.beans.find(x=>x.id===a.dataset.id); const im=a.querySelector("img"); if(!b||!im) return; const o=document.createElement("div"); o.className="lightbox"; o.innerHTML=`<img src="${esc(im.currentSrc||im.src)}" alt="">`; o.onclick=()=>o.remove(); document.getElementById("overlay").appendChild(o); }
+  else if(act==="zoom"){ const im=a.querySelector("img"); if(!im) return; const o=document.createElement("div"); o.className="lightbox"; o.innerHTML=`<img src="${esc(im.currentSrc||im.src)}" alt="">`; o.onclick=()=>o.remove(); document.getElementById("overlay").appendChild(o); }
   else if(act==="login") openLogin();
+  else if(act==="logout"){ logout(); toast("Đã thoát quản trị trên trình duyệt này."); }
   else if(act==="close") closeSheet();
-  else if(!S.edit) return;
-  else if(act==="logout"){ logout(); toast("Đã thoát chế độ chỉnh sửa trên trình duyệt này."); }
-  else if(act==="new") openBean();
-  else if(act==="prof") openProfile();
-  else if(act==="rmpic"){ ev.preventDefault(); F.pic=null; F.picNew=null; drawDrop(); }
-  else if(act==="edit"){ const b=DATA.beans.find(x=>x.id===a.dataset.id); if(b) openBean(b); }
-  else if(act==="askdel"){ S.del=a.dataset.id; render(); }
+  else if(act==="copykey"){ const i=a.parentElement.querySelector("input"); copy(i.value); }
   else if(act==="nodel"){ S.del=null; render(); }
-  else if(act==="del"){ const id=a.dataset.id, b=DATA.beans.find(x=>x.id===id); S.del=null;
-    save({...DATA,beans:DATA.beans.filter(x=>x.id!==id)},{remove:b&&b.photo?[b.photo]:[],msg:"Đã xoá hạt",commitMsg:"Xoá hạt: "+(b?b.name:id)}).then(ok=>{ if(!ok) render(); }); }
+  else if(act==="reloadadmin") loadAdmin();
+  else if(act==="admask"){ S.del="p:"+a.dataset.id; render(); }
+  else if(act==="admdel"&&S.edit){ const id=a.dataset.id; S.del=null; await adminDelete(id); }
+  else if(act==="askdelprofile"){ S.delProfile=true; render(); }
+  else if(act==="nodelprofile"){ S.delProfile=false; render(); }
+  else if(act==="delprofile"&&ctx&&ctx.kind==="comm"&&ctx.canEdit){
+    const done=busy("Đang xoá sổ…");
+    try{ await worker("DELETE",`/profiles/${ctx.id}`,null,ctx.key); delete KEYS[ctx.id]; saveKeys(); PROFILES.delete(ctx.id);
+      if(COMM.index) COMM.index.profiles=COMM.index.profiles.filter(p=>p.id!==ctx.id); toast("Đã xoá sổ của bạn."); location.hash="#cong-dong"; }
+    catch(e){ workerError(e); } finally{ done(); }
+  }
+  else if(!ctx||!ctx.canEdit) return;
+  else if(act==="new") openBean();
+  else if(act==="prof") openProfileSheet(ctx);
+  else if(act==="rmpic"){ ev.preventDefault(); F.pic=null; F.picNew=null; drawDrop(); }
+  else if(act==="edit"){ const b=ctx.data.beans.find(x=>x.id===a.dataset.id); if(b) openBean(b); }
+  else if(act==="askdel"){ S.del=a.dataset.id; render(); }
+  else if(act==="del"){ const id=a.dataset.id, b=ctx.data.beans.find(x=>x.id===id); S.del=null;
+    if(!(await ctx.commit({...ctx.data,beans:ctx.data.beans.filter(x=>x.id!==id)},[],"Đã xoá hạt","Xoá hạt: "+(b?b.name:id)))) render(); }
 });
-document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return; const lb=document.querySelector(".lightbox"); if(lb) lb.remove(); else if(F) closeSheet(); });
+async function adminDelete(id){
+  const done=busy("Đang xoá sổ khỏi repo…");
+  try{
+    await ghCommit(async(head,treeSha)=>{
+      const cur=await gh(`/git/trees/${treeSha}?recursive=1`);
+      const paths=(cur.tree||[]).filter(t=>t.type==="blob"&&t.path.startsWith(`community/${id}/`)).map(t=>t.path);
+      const idx=(await ghJson("community/index.json"))||{profiles:[]};
+      const profiles=(idx.profiles||[]).filter(p=>p&&p.id!==id);
+      return {message:`Quản trị xoá hồ sơ ${id}`,files:[...paths.map(path=>({path,delete:true})),{path:"community/index.json",content:JSON.stringify({profiles},null,1)+"\n"}]};
+    });
+    PROFILES.delete(id); if(COMM.adminIndex) COMM.adminIndex.profiles=COMM.adminIndex.profiles.filter(p=>p.id!==id);
+    if(COMM.index) COMM.index.profiles=COMM.index.profiles.filter(p=>p.id!==id);
+    render(); toast("Đã xoá sổ. Trang công khai cập nhật sau khoảng 1 phút.",5000);
+  }catch(e){ ghError(e); render(); } finally{ done(); }
+}
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return; const lb=document.querySelector(".lightbox"); if(lb) lb.remove(); else if(F&&F.kind!=="create") closeSheet(); });
 document.addEventListener("submit",async ev=>{
   ev.preventDefault(); if(!F) return;
   if(F.kind==="login"){
     const tok=document.getElementById("l-token").value.trim(), err=document.getElementById("l-err"), btn=ev.target.querySelector('[type="submit"]');
     if(!tok) return; btn.disabled=true; btn.textContent="Đang kiểm tra…"; err.hidden=true;
-    try{ await connect(tok); try{ localStorage.setItem(TOKEN_KEY,tok); }catch(e){} closeSheet(); toast("Đã vào chế độ chỉnh sửa."); S.loaded=false; render(); load(); }
-    catch(e){ S.token=null; S.edit=false; btn.disabled=false; btn.textContent="Kết nối"; err.hidden=false;
+    try{ await connect(tok); try{ localStorage.setItem(TOKEN_KEY,tok); }catch(e){} closeSheet(); toast("Đã đăng nhập quản trị."); OWNER.loaded=false; PROFILES.clear(); render(); ensureData(); }
+    catch(e){ S.token=null; S.edit=false; btn.disabled=false; btn.textContent="Đăng nhập"; err.hidden=false;
       err.textContent=e.status===401?"Mã không hợp lệ hoặc đã hết hạn.":e.status===403||e.status===404?`Mã này chưa có quyền ghi vào ${GH.owner}/${GH.repo}. Kiểm tra lại bước 2 và 3.`:"Không kết nối được tới GitHub. Kiểm tra mạng rồi thử lại."; }
     return;
   }
-  if(!S.edit) return;
+  if(F.kind==="create"){
+    const name=document.getElementById("c-name").value.trim(); if(!name){ toast("Hãy nhập tên hiển thị."); return; }
+    if(F.busy){ toast("Đợi ảnh nén xong nhé."); return; }
+    if(CFG.turnstileSiteKey&&!tsToken){ toast("Hãy hoàn thành bước xác minh chống spam."); return; }
+    const body={profile:{name,bio:document.getElementById("c-bio").value.trim(),avatar:F.picNew?"new:avatar":""},beans:[],images:F.picNew?{avatar:F.picNew}:{},turnstile:tsToken};
+    const done=busy("Đang tạo sổ…");
+    try{
+      const res=await worker("POST","/profiles",body);
+      KEYS[res.id]=res.key; saveKeys();
+      if(F.picNew&&res.profile.avatar) LOCAL.set(res.profile.avatar,F.picNew);
+      PROFILES.set(res.id,{doc:res.profile}); patchIndex(res.profile); F=null;
+      location.hash=`#u/${res.id}`;
+      toast("Đã tạo sổ. Hãy sao chép và cất link sửa để dùng trên máy khác.",6000);
+    }catch(e){ workerError(e); if(window.turnstile&&tsWidget!=null){ window.turnstile.reset(tsWidget); tsToken=""; } }
+    finally{ done(); }
+    return;
+  }
+  const ctx=currentCtx(); if(!ctx||!ctx.canEdit) return;
   if(F.busy){ toast("Đợi ảnh nén xong nhé."); return; }
   if(F.kind==="prof"){
-    const old=DATA.profile.avatar||""; let avatar=old; const newImages=[], remove=[];
-    if(F.picNew){ avatar=`images/avatar-${uid()}.jpg`; newImages.push([avatar,F.picNew]); if(old) remove.push(old); }
-    else if(!F.pic){ avatar=""; if(old) remove.push(old); }
-    const profile={name:document.getElementById("p-name").value.trim(),bio:document.getElementById("p-bio").value.trim(),avatar};
-    if(await save({...DATA,profile},{newImages,remove,msg:"Đã lưu hồ sơ",commitMsg:"Cập nhật hồ sơ"})) closeSheet();
+    const name=document.getElementById("p-name").value.trim(); if(ctx.kind==="comm"&&!name){ toast("Hãy nhập tên hiển thị."); return; }
+    const pending=[]; let avatar=ctx.data.profile.avatar||"";
+    if(F.picNew) pending.push({slot:"avatar",dataUrl:F.picNew}); else if(!F.pic) avatar="";
+    const next={...ctx.data,profile:{name,bio:document.getElementById("p-bio").value.trim(),avatar}};
+    if(await ctx.commit(next,pending,"Đã lưu hồ sơ","Cập nhật hồ sơ")) closeSheet();
     return;
   }
   const name=document.getElementById("f-name").value.trim(); if(!name){ toast("Hãy nhập tên hạt."); return; }
   let unit=(F.unit||"250g").trim()||"250g"; if(/^\d+([.,]\d+)?$/.test(unit)) unit+="g";
-  const id=F.id||uid(), old=F.photo||""; let photoPath=old; const newImages=[], remove=[];
-  if(F.picNew){ photoPath=`images/${id}-${Date.now().toString(36)}.jpg`; newImages.push([photoPath,F.picNew]); if(old) remove.push(old); }
-  else if(!F.pic){ photoPath=""; if(old) remove.push(old); }
+  const id=F.id||uid(); const pending=[]; let photo=F.photo||"";
+  if(F.picNew) pending.push({slot:id,dataUrl:F.picNew}); else if(!F.pic) photo="";
   const bean={ id, ts:F.ts||Date.now(), date:document.getElementById("f-date").value||today(), name, process:(F.process||"").trim(),
     origin:document.getElementById("f-origin").value.trim(), roast:+F.roast||3, roastText:(F.roastText||"").trim(),
-    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo:photoPath };
-  const beans=[...DATA.beans], i=beans.findIndex(x=>x.id===id); if(i>=0) beans[i]=bean; else beans.push(bean);
-  if(await save({...DATA,beans},{newImages,remove,msg:i>=0?"Đã lưu thay đổi":"Đã đăng hạt",commitMsg:(i>=0?"Sửa hạt: ":"Thêm hạt: ")+name})) closeSheet();
+    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo };
+  const beans=[...ctx.data.beans], i=beans.findIndex(x=>x.id===id); if(i>=0) beans[i]=bean; else beans.push(bean);
+  if(await ctx.commit({...ctx.data,beans},pending,i>=0?"Đã lưu thay đổi":"Đã đăng hạt",(i>=0?"Sửa hạt: ":"Thêm hạt: ")+name)) closeSheet();
 });
 
-/* ---------- boot ---------- */
+/* ================= boot ================= */
 (async()=>{
+  try{ const c=await fetchJson("config.json"); if(c) CFG={...CFG,...c}; }catch(e){}
+  S.branch=CFG.branch||"main";
   let tok=null; try{ tok=localStorage.getItem(TOKEN_KEY); }catch(e){}
   if(tok){ try{ await connect(tok); }catch(e){ S.token=null; S.edit=false; if(e.status===401){ try{ localStorage.removeItem(TOKEN_KEY); }catch(_){} } } }
-  render(); load();
+  S.route=parseHash(); render(); ensureData();
+  if(S.route.name!=="owner") loadOwner();
 })();
 })();
 </script>
