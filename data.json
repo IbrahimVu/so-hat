@@ -437,8 +437,18 @@
    "price": 325000,
    "unit": "100g",
    "photo": "images/mvckkj4325fj5-mvckkj43.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/1BEXXqsAB",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Dứa",
+    "Hoa Hồng",
+    "Gừng ngọt"
+   ]
   },
   {
    "id": "mvcknaubcs41j",
