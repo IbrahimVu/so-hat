@@ -772,6 +772,32 @@
     "Hương hoa rừng",
     "Cacao"
    ]
+  },
+  {
+   "id": "mvcp9g9882jj8",
+   "ts": 1792259888012,
+   "date": "2026-10-03",
+   "name": "Cà phê CW6",
+   "process": "Thermal Shock Double Fermentat",
+   "origin": "Cauca, Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 323000,
+   "unit": "100g",
+   "photo": "images/mvcp9g9882jj8-mvcp9g98.jpg",
+   "buyUrl": "",
+   "infoUrl": "https://www.facebook.com/80pluscoffeeroastery/posts/pfbid02ju1GbqhwL8BTKYXP8kx4LK6kZoLYaSeSg44Z2neqVLoSEb2YUy2RZqauc5A84HgZl",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Vải",
+    "Đào",
+    "Hoa hồng",
+    "Nho",
+    "Mâm xôi"
+   ]
   }
  ]
 }
