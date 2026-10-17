@@ -270,6 +270,21 @@
    "photo": "images/mvckq1xl2ubwx-mvckq1xl.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvcktgcmwppo2",
+   "ts": 1792252423174,
+   "date": "2025-08-29",
+   "name": "Cà phê SHG Sherry Whiskey Barrel Aged",
+   "process": "Sherry Whisky Barrel Fermentat",
+   "origin": "Masaguara, Honduras",
+   "roast": 2,
+   "roastText": "",
+   "price": 175000,
+   "unit": "125g",
+   "photo": "images/mvcktgcmwppo2-mvcktgcm.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
