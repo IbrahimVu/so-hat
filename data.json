@@ -694,6 +694,32 @@
     "Dưa hấu",
     "Dưa lưới"
    ]
+  },
+  {
+   "id": "mvcongqhb2wag",
+   "ts": 1792258862201,
+   "date": "2026-10-10",
+   "name": "Cà phê Quindio Watermelon",
+   "process": "Washed",
+   "origin": "Quindio, Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 280350,
+   "unit": "100g",
+   "photo": "images/mvcongqhb2wag-mvcongqh.jpg",
+   "buyUrl": "https://s.shopee.vn/5AtKizW2DC",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Espresso",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Nước ép dưa hấu",
+    "dưa chuột",
+    "kẹo dẻo dưa hấu"
+   ]
   }
  ]
 }
