@@ -226,14 +226,26 @@
    "id": "mvcjgjkwviayb",
    "ts": 1792250141216,
    "date": "2026-01-20",
-   "name": "Cà phê China Yunnan AA Anaerobic",
+   "name": "Cà phê Yunnan AA Anaerobic",
    "process": "Washed",
    "origin": "Yunna, China",
    "roast": 2,
    "roastText": "",
    "price": 115000,
    "unit": "125g",
-   "photo": "images/mvcjgjkwviayb-mvcjgjkw.jpg"
+   "photo": "images/mvcjgjkwviayb-mvcjgjkw.jpg",
+   "buyUrl": "https://s.shopee.vn/2gBzfbQ60o",
+   "infoUrl": "",
+   "brew": [
+    "Cold brew",
+    "Pour-over"
+   ],
+   "flavors": [
+    "Vang / lên men",
+    "Hoa",
+    "Socola",
+    "Nho khô"
+   ]
   },
   {
    "id": "mvcjlthydrdh8",
