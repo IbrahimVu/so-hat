@@ -209,8 +209,18 @@
    "price": 110000,
    "unit": "125g",
    "photo": "images/mvcjezr17ue93-mvcjezr1.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/1Lgc55aZJ8",
+   "infoUrl": "",
+   "brew": [
+    "Cold brew",
+    "Pour-over"
+   ],
+   "flavors": [
+    "Mật ong",
+    "Vang / lên men",
+    "Xoài",
+    "Dứa"
+   ]
   },
   {
    "id": "mvcjgjkwviayb",
