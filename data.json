@@ -108,6 +108,19 @@
    "price": 69000,
    "unit": "100g",
    "photo": "images/mvcjc31kvxxgp-mvcjc31k.jpg"
+  },
+  {
+   "id": "mvcjezr17ue93",
+   "ts": 1792250068861,
+   "date": "2026-01-20",
+   "name": "Cà Phê Cold Brew Summer Vibe",
+   "process": "Natural",
+   "origin": "Cầu Đất, Việt Nam",
+   "roast": 3,
+   "roastText": "Omni",
+   "price": 110000,
+   "unit": "125g",
+   "photo": "images/mvcjezr17ue93-mvcjezr1.jpg"
   }
  ]
 }
