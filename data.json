@@ -184,7 +184,18 @@
    "roastText": "",
    "price": 69000,
    "unit": "100g",
-   "photo": "images/mvcjc31kvxxgp-mvcjc31k.jpg"
+   "photo": "images/mvcjc31kvxxgp-mvcjc31k.jpg",
+   "buyUrl": "https://s.shopee.vn/6q1YcvSPRZ",
+   "infoUrl": "",
+   "brew": [
+    "Phin",
+    "Espresso"
+   ],
+   "flavors": [
+    "Socola",
+    "Hương hạt rang",
+    "Hạt dẻ"
+   ]
   },
   {
    "id": "mvcjezr17ue93",
