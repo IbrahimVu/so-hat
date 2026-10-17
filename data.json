@@ -411,7 +411,19 @@
    "roastText": "Sáng+",
    "price": 255000,
    "unit": "100g",
-   "photo": "images/mvcke6fbnkf3p-mvcke6fb.jpg"
+   "photo": "images/mvcke6fbnkf3p-mvcke6fb.jpg",
+   "buyUrl": "https://s.shopee.vn/9V2Jqx5XnA",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Mật ong",
+    "Đào",
+    "Cam"
+   ]
   },
   {
    "id": "mvckkj4325fj5",
