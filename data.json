@@ -121,6 +121,19 @@
    "price": 110000,
    "unit": "125g",
    "photo": "images/mvcjezr17ue93-mvcjezr1.jpg"
+  },
+  {
+   "id": "mvcjgjkwviayb",
+   "ts": 1792250141216,
+   "date": "2026-01-20",
+   "name": "Cà phê China Yunnan AA Anaerobic",
+   "process": "Washed",
+   "origin": "Yunna, China",
+   "roast": 2,
+   "roastText": "",
+   "price": 175000,
+   "unit": "125g",
+   "photo": "images/mvcjgjkwviayb-mvcjgjkw.jpg"
   }
  ]
 }
