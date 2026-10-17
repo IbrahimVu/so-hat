@@ -90,7 +90,18 @@
    "unit": "250g",
    "photo": "images/muqt75pg2e2dm.jpg",
    "buyUrl": "https://s.shopee.vn/113lf2rIo5",
-   "infoUrl": ""
+   "infoUrl": "",
+   "brew": [
+    "Pour-over",
+    "V60"
+   ],
+   "flavors": [
+    "Socola",
+    "Hoa Hồng",
+    "Mận Chín",
+    "Đào",
+    "Rượu"
+   ]
   },
   {
    "id": "muqtar05jyfr8",
