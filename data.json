@@ -480,8 +480,15 @@
    "buyUrl": "",
    "infoUrl": "",
    "soldOut": true,
-   "brew": [],
-   "flavors": []
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Hương thảo",
+    "Gừng khô",
+    "Nước cam",
+    "Chanh chua"
+   ]
   },
   {
    "id": "mvcktgcmwppo2",
