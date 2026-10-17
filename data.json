@@ -44,8 +44,14 @@
    "photo": "images/muqsk57m5lrr1.jpg",
    "buyUrl": "https://s.shopee.vn/8V9majv4vh",
    "infoUrl": "",
-   "brew": [],
-   "flavors": []
+   "brew": [
+    "Espresso"
+   ],
+   "flavors": [
+    "Lychee",
+    "Strawberry",
+    "Rose"
+   ]
   },
   {
    "id": "muqt3pmeewrci",
