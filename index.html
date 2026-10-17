@@ -88,7 +88,13 @@ input,textarea{font:inherit;color:var(--ink)}
 .price span{font-size:12px;color:var(--muted)}
 .per100{font-size:12px;color:var(--muted);font-family:var(--f-mono);text-align:right;margin-top:-4px}
 .foot{font-size:12.5px;color:var(--muted)}
-.acts2{display:flex;gap:4px;flex-wrap:wrap}
+.acts2{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.links{display:flex;gap:6px;flex-wrap:wrap}
+.linkchip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;max-width:100%;min-width:0}
+.linkchip:hover{border-color:var(--ink)}
+.linkchip.buy{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.linkchip small{font-weight:400;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.linkchip.buy small{color:inherit;opacity:.75}
 
 .empty{border:1.5px dashed var(--line);border-radius:16px;padding:26px;display:grid;gap:12px;justify-items:start}
 .empty h3{font-size:22px}
@@ -247,11 +253,15 @@ async function fetchJson(path){
   if(!r.ok){ const e=new Error("http "+r.status); e.status=r.status; throw e; }
   return r.json();
 }
+function cleanUrl(v){ v=String(v||"").trim(); if(!v) return ""; if(!/^[a-z][a-z0-9+.-]*:/i.test(v)) v="https://"+v.replace(/^\/+/,"");
+  try{ const u=new URL(v); if(!/^https?:$/.test(u.protocol)||!u.hostname.includes(".")) return null; return u.href.slice(0,500); }catch(e){ return null; } }
+const safeHref=v=>{ const u=cleanUrl(v); return u||""; };
+const hostOf=v=>{ try{ return new URL(v).hostname.replace(/^www\./,""); }catch(e){ return ""; } };
 const editLink=(id,key)=>`${location.origin}${location.pathname}#u/${id}/k/${key}`;
 
 /* ================= GitHub (owner) ================= */
 async function gh(path,opts={}){
-  const r=await fetch(API+path,{...opts,headers:{"Accept":opts.raw?"application/vnd.github.raw+json":"application/vnd.github+json","Authorization":"Bearer "+S.token,"X-GitHub-Api-Version":"2022-11-28",...(opts.body?{"Content-Type":"application/json"}:{})}});
+  const r=await fetch(API+path,{...opts,cache:"no-store",headers:{"Accept":opts.raw?"application/vnd.github.raw+json":"application/vnd.github+json","Authorization":"Bearer "+S.token,"X-GitHub-Api-Version":"2022-11-28",...(opts.body?{"Content-Type":"application/json"}:{})}});
   if(r.status===404&&opts.allow404) return null;
   if(!r.ok){ const err=new Error("gh "+r.status); err.status=r.status; throw err; }
   return r.status===204?null:(opts.raw?r.text():r.json());
@@ -265,8 +275,9 @@ async function connect(token){
 }
 // Atomic commit. build(headSha, treeSha) → {files:[{path,content}|{path,b64}|{path,delete:true}], message}
 async function ghCommit(build){
-  for(let attempt=0;attempt<3;attempt++){
-    const ref=await gh(`/git/ref/heads/${S.branch}`); const head=ref.object.sha;
+  for(let attempt=0;attempt<4;attempt++){
+    // Right after a save, GitHub can briefly report the previous commit; build on the commit we just made instead.
+    const head=(attempt===0&&S.head)?S.head:(await gh(`/git/ref/heads/${S.branch}`)).object.sha;
     const base=await gh(`/git/commits/${head}`);
     const {files,message}=await build(head,base.tree.sha);
     const tree=[];
@@ -277,8 +288,8 @@ async function ghCommit(build){
     }
     const t=await gh("/git/trees",{method:"POST",body:JSON.stringify({base_tree:base.tree.sha,tree})});
     const c=await gh("/git/commits",{method:"POST",body:JSON.stringify({message,tree:t.sha,parents:[head]})});
-    try{ await gh(`/git/refs/heads/${S.branch}`,{method:"PATCH",body:JSON.stringify({sha:c.sha})}); return; }
-    catch(e){ if(e.status===422&&attempt<2) continue; throw e; }
+    try{ await gh(`/git/refs/heads/${S.branch}`,{method:"PATCH",body:JSON.stringify({sha:c.sha})}); S.head=c.sha; return; }
+    catch(e){ S.head=null; if(e.status===422&&attempt<3){ await new Promise(r=>setTimeout(r,400+attempt*600)); continue; } throw e; }
   }
 }
 function ghError(e){
@@ -412,6 +423,8 @@ function card(b,ctx){
       <div class="tags">${b.process?`<span class="tag">${esc(b.process)}</span>`:""}${b.roastText?`<span class="roast"><i style="background:linear-gradient(90deg,var(--r1),var(--r5))"></i>Rang ${esc(b.roastText)}</span>`:`<span class="roast"><i style="background:var(--r${Math.min(5,Math.max(1,+b.roast||3))})"></i>Rang ${esc(ROASTS[Math.min(5,Math.max(1,+b.roast||3))-1].toLowerCase())}</span>`}</div>
       <div class="price">${b.price?`<b>${vnd(b.price)}</b><span>/ ${esc(b.unit||"250g")}</span>`:`<span>Chưa có giá</span>`}</div>
       ${(()=>{ const p=per100(b); return p!=null&&grams(b.unit||"250g")!==100?`<div class="per100">≈ ${vnd(Math.round(p/100)*100)} / 100g</div>`:""; })()}
+      ${(()=>{ const buy=safeHref(b.buyUrl), info=safeHref(b.infoUrl); if(!buy&&!info) return "";
+        return `<div class="links">${buy?`<a class="linkchip buy" href="${esc(buy)}" target="_blank" rel="noopener noreferrer nofollow ugc">Mua ở đây ↗ <small>${esc(hostOf(buy))}</small></a>`:""}${info?`<a class="linkchip" href="${esc(info)}" target="_blank" rel="noopener noreferrer nofollow ugc">Thông tin ↗ <small>${esc(hostOf(info))}</small></a>`:""}</div>`; })()}
       <div class="foot">${fmtDate(b)}</div>
       ${ctx.canEdit?(S.del===b.id?`<div class="acts2"><span style="font-size:13px;align-self:center">Xoá hạt này?</span><button class="btn sm primary" data-act="del" data-id="${esc(b.id)}">Xoá</button><button class="btn sm" data-act="nodel">Giữ</button></div>`:`<div class="acts2"><button class="btn sm" data-act="edit" data-id="${esc(b.id)}">Sửa</button><button class="btn sm ghost" data-act="askdel" data-id="${esc(b.id)}">Xoá</button></div>`):""}
     </div></article>`;
@@ -590,7 +603,9 @@ function openBean(b){
     <div class="field"><span class="lbl">Ngưỡng rang</span><div class="roastpick" role="group">${ROASTS.map((r,i)=>`<button type="button" data-chip="roast" data-v="${i+1}" aria-pressed="${!F.roastText&&+F.roast===i+1}"><i style="background:var(--r${i+1})"></i><span>${r}</span></button>`).join("")}</div>
       <div class="unitrow"><input id="f-roast" maxlength="40" placeholder="Khác: Medium-light, Omni, Agtron 65…" aria-label="Ngưỡng rang khác" value="${esc(F.roastText||"")}" class="${F.roastText?"on":""}" style="width:100%;max-width:320px"></div></div>
     <div class="field"><label class="lbl" for="f-price">Giá bán</label><div class="pricebox"><input id="f-price" inputmode="numeric" maxlength="13" value="${F.price?Number(F.price).toLocaleString("vi-VN"):""}" placeholder="180.000"><span>₫</span></div>
-      <div class="unitrow" role="group" aria-label="Khối lượng">${UNITS.map(v=>chip("unit",v,F.unit===v)).join("")}<input id="f-unit" maxlength="10" placeholder="Khác: 300g" aria-label="Khối lượng khác" value="${cUnit?esc(F.unit||""):""}" class="${cUnit?"on":""}"></div></div>`,
+      <div class="unitrow" role="group" aria-label="Khối lượng">${UNITS.map(v=>chip("unit",v,F.unit===v)).join("")}<input id="f-unit" maxlength="10" placeholder="Khác: 300g" aria-label="Khối lượng khác" value="${cUnit?esc(F.unit||""):""}" class="${cUnit?"on":""}"></div></div>
+    <div class="field"><label class="lbl" for="f-buy">Link mua (tuỳ chọn)</label><input id="f-buy" inputmode="url" autocomplete="off" maxlength="500" value="${esc(F.buyUrl||"")}" placeholder="Shopee, website quán rang, trang Facebook…"></div>
+    <div class="field"><label class="lbl" for="f-info">Link thông tin sản phẩm (tuỳ chọn)</label><input id="f-info" inputmode="url" autocomplete="off" maxlength="500" value="${esc(F.infoUrl||"")}" placeholder="Trang giới thiệu hạt, bài review…"></div>`,
     F.id?"Lưu":"Đăng hạt");
   drawDrop(); wireDrop("drop",async f=>{ F.busy=true; drawDrop(); try{ F.picNew=await compress(f,[1600,1280,1080,900],700000); F.pic=F.picNew; }catch(e){ toast("Không đọc được ảnh này. Thử ảnh JPG hoặc PNG."); } F.busy=false; drawDrop(); });
   const pr=document.getElementById("f-price"); pr.addEventListener("input",()=>{ const n=pr.value.replace(/\D/g,"").slice(0,10); pr.value=n?Number(n).toLocaleString("vi-VN"):""; });
@@ -705,11 +720,14 @@ document.addEventListener("submit",async ev=>{
   }
   const name=document.getElementById("f-name").value.trim(); if(!name){ toast("Hãy nhập tên hạt."); return; }
   let unit=(F.unit||"250g").trim()||"250g"; if(/^\d+([.,]\d+)?$/.test(unit)) unit+="g";
+  const buyUrl=cleanUrl(document.getElementById("f-buy").value), infoUrl=cleanUrl(document.getElementById("f-info").value);
+  if(buyUrl===null){ toast("Link mua chưa đúng. Hãy dán đầy đủ địa chỉ, ví dụ https://shopee.vn/…"); document.getElementById("f-buy").focus(); return; }
+  if(infoUrl===null){ toast("Link thông tin chưa đúng. Hãy dán đầy đủ địa chỉ, ví dụ https://…"); document.getElementById("f-info").focus(); return; }
   const id=F.id||uid(); const pending=[]; let photo=F.photo||"";
   if(F.picNew) pending.push({slot:id,dataUrl:F.picNew}); else if(!F.pic) photo="";
   const bean={ id, ts:F.ts||Date.now(), date:document.getElementById("f-date").value||today(), name, process:(F.process||"").trim(),
     origin:document.getElementById("f-origin").value.trim(), roast:+F.roast||3, roastText:(F.roastText||"").trim(),
-    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo };
+    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo, buyUrl, infoUrl };
   const beans=[...ctx.data.beans], i=beans.findIndex(x=>x.id===id); if(i>=0) beans[i]=bean; else beans.push(bean);
   if(await ctx.commit({...ctx.data,beans},pending,i>=0?"Đã lưu thay đổi":"Đã đăng hạt",(i>=0?"Sửa hạt: ":"Thêm hạt: ")+name)) closeSheet();
 });
