@@ -45,13 +45,14 @@
    "photo": "images/muqsk57m5lrr1.jpg",
    "buyUrl": "https://s.shopee.vn/8V9majv4vh",
    "infoUrl": "",
+   "soldOut": false,
    "brew": [
     "Espresso"
    ],
    "flavors": [
-    "Lychee",
-    "Strawberry",
-    "Rose"
+    "Vải",
+    "Dâu",
+    "Hoa hồng"
    ]
   },
   {
