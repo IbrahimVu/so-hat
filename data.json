@@ -300,6 +300,21 @@
    "photo": "images/mvckvuyiy4qdt-mvckvuyi.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvckxzkoc51w3",
+   "ts": 1792252634712,
+   "date": "2025-09-09",
+   "name": "Cà phê Santander Supremo Rosedale Microbial",
+   "process": "Anaerobic Yeast Washed",
+   "origin": "Santander, Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 196000,
+   "unit": "100g",
+   "photo": "images/mvckxzkoc51w3-mvckxzko.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
