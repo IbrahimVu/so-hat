@@ -107,14 +107,23 @@
    "id": "muqtar05jyfr8",
    "ts": 1790936411189,
    "date": "2026-03-08",
-   "name": "Cà Phê Pha Phin Flusso Robusta Honey",
+   "name": "Cà Phê Robusta Honey",
    "process": "Honey",
    "origin": "EA-Tân, Đăk Lăk",
    "roast": 3,
    "roastText": "Vừa-đậm",
    "price": 95000,
    "unit": "250g",
-   "photo": "images/muqtar05jyfr8.jpg"
+   "photo": "images/muqtar05jyfr8.jpg",
+   "buyUrl": "",
+   "infoUrl": "",
+   "brew": [
+    "Phin"
+   ],
+   "flavors": [
+    "Caramel",
+    "Đậm đà"
+   ]
   },
   {
    "id": "muqtd5id6sxov",
