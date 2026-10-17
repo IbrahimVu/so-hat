@@ -310,7 +310,19 @@
    "roastText": "Sáng+",
    "price": 200000,
    "unit": "100g",
-   "photo": "images/mvcjw5sjq3w06-mvcjw5sj.jpg"
+   "photo": "images/mvcjw5sjq3w06-mvcjw5sj.jpg",
+   "buyUrl": "https://s.shopee.vn/2qVPuVUTgv",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Vải",
+    "Xoài",
+    "Dứa"
+   ]
   },
   {
    "id": "mvcjy6ugos3xs",
