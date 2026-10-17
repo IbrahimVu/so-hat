@@ -623,8 +623,17 @@
    "price": 265000,
    "unit": "100g",
    "photo": "images/mvcl769sduikb-mvcl769s.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/5AtKhjB5d4",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Đường nâu",
+    "Cam",
+    "Việt quất"
+   ]
   }
  ]
 }
