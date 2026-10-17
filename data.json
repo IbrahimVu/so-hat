@@ -159,7 +159,19 @@
    "roastText": "",
    "price": 79000,
    "unit": "100g",
-   "photo": "images/mvcj9xjfnor3t-mvcj9xjf.jpg"
+   "photo": "images/mvcj9xjfnor3t-mvcj9xjf.jpg",
+   "buyUrl": "",
+   "infoUrl": "",
+   "brew": [
+    "Phin",
+    "Espresso"
+   ],
+   "flavors": [
+    "Socola",
+    "Caramel",
+    "Hương thảo mộc",
+    "trái cây khô"
+   ]
   },
   {
    "id": "mvcjc31kvxxgp",
