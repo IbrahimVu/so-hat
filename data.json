@@ -1,0 +1,87 @@
+{
+ "profile": {
+  "name": "Sổ hạt của DucVM",
+  "bio": "Quá trình trải nghiệm các loại hạt cà phê từ trong và ngoài nước",
+  "avatar": ""
+ },
+ "beans": [
+  {
+   "id": "muqsaqka6z1qg",
+   "ts": 1790934731002,
+   "date": "2026-08-18",
+   "name": "Cà phê Colombia El Paraiso Double Anaerobic Flor Lichi",
+   "process": "Double Anaerobic",
+   "origin": "Cauca - Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 450000,
+   "unit": "150g",
+   "photo": "images/muqsaqka6z1qg.jpg"
+  },
+  {
+   "id": "muqsk57m5lrr1",
+   "ts": 1790935169890,
+   "date": "2026-09-12",
+   "name": "Cà phê Thailand PHU-615",
+   "process": "Natural",
+   "origin": "Huai Khun Phra, Chiang Rai, Thailand",
+   "roast": 2,
+   "roastText": "Omni",
+   "price": 380000,
+   "unit": "200g",
+   "photo": "images/muqsk57m5lrr1.jpg"
+  },
+  {
+   "id": "muqt3pmeewrci",
+   "ts": 1790936082806,
+   "date": "2026-09-12",
+   "name": "Cà phê Thailand PHU-709",
+   "process": "Double Anaerobic",
+   "origin": "Om Koi, Chiang Mai, Thailand",
+   "roast": 2,
+   "roastText": "",
+   "price": 392000,
+   "unit": "200g",
+   "photo": "images/muqt3pmeewrci.jpg"
+  },
+  {
+   "id": "muqt75pg2e2dm",
+   "ts": 1790936243620,
+   "date": "2026-04-10",
+   "name": "Cà phê Arabica Quảng Trị",
+   "process": "Natural",
+   "origin": "Quảng Trị",
+   "roast": 2,
+   "roastText": "",
+   "price": 230000,
+   "unit": "250g",
+   "photo": "images/muqt75pg2e2dm.jpg"
+  },
+  {
+   "id": "muqtar05jyfr8",
+   "ts": 1790936411189,
+   "date": "2026-03-08",
+   "name": "Cà Phê Pha Phin Flusso Robusta Honey",
+   "process": "Honey",
+   "origin": "EA-Tân, Đăk Lăk",
+   "roast": 3,
+   "roastText": "Vừa-đậm",
+   "price": 108000,
+   "unit": "250g",
+   "photo": "images/muqtar05jyfr8.jpg"
+  },
+  {
+   "id": "muqtd5id6sxov",
+   "ts": 1790936523301,
+   "date": "2026-03-08",
+   "name": "Cà Phê Pha Phin Robusta Traditional Flusso Coffee",
+   "process": "Honey",
+   "origin": "Buôn Mê Thuột, Đăk Lăk",
+   "roast": 4,
+   "roastText": "",
+   "price": 108000,
+   "unit": "250g",
+   "photo": "images/muqtd5id6sxov.jpg"
+  }
+ ]
+}
