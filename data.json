@@ -22,7 +22,7 @@
    "id": "muqsk57m5lrr1",
    "ts": 1790935169890,
    "date": "2026-09-12",
-   "name": "Cà phê Thailand PHU-615",
+   "name": "Cà phê PHU-615",
    "process": "Natural",
    "origin": "Huai Khun Phra, Chiang Rai, Thailand",
    "roast": 2,
@@ -31,7 +31,9 @@
    "unit": "200g",
    "photo": "images/muqsk57m5lrr1.jpg",
    "buyUrl": "https://s.shopee.vn/8V9majv4vh",
-   "infoUrl": ""
+   "infoUrl": "",
+   "brew": [],
+   "flavors": []
   },
   {
    "id": "muqt3pmeewrci",
