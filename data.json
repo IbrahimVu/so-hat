@@ -646,6 +646,30 @@
     "Cam",
     "Việt quất"
    ]
+  },
+  {
+   "id": "mvcodmci4yryy",
+   "ts": 1792258402914,
+   "date": "2026-10-10",
+   "name": "Cà phê Arabica Cầu Đất",
+   "process": "Washed",
+   "origin": "Cầu Đất, Lâm Đồng",
+   "roast": 3,
+   "roastText": "",
+   "price": 310000,
+   "unit": "500g",
+   "photo": "images/mvcodmci4yryy-mvcodmci.jpg",
+   "buyUrl": "https://s.shopee.vn/7VHFUciwEq",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Cold brew"
+   ],
+   "flavors": [
+    "Chua thanh",
+    "Thơm nhẹ",
+    "Hậu ngọt"
+   ]
   }
  ]
 }
