@@ -608,8 +608,17 @@
    "price": 235000,
    "unit": "100g",
    "photo": "images/mvcl52h3gskvx-mvcl52h3.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/9APTTBFVQN",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Hoa",
+    "Vang / lên men",
+    "Mâm xôi"
+   ]
   },
   {
    "id": "mvcl769sduikb",
