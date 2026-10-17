@@ -68,14 +68,15 @@
    "photo": "images/muqt3pmeewrci-mvcljyh3.jpg",
    "buyUrl": "https://s.shopee.vn/80DVzowywc",
    "infoUrl": "",
+   "soldOut": false,
    "brew": [
     "Pour-over",
     "V60"
    ],
    "flavors": [
-    "Grape",
-    "Berry",
-    "Stone Fruit"
+    "Nho",
+    "Quả hạch",
+    "Quả mọng"
    ]
   },
   {
