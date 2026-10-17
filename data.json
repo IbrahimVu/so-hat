@@ -240,6 +240,21 @@
    "photo": "images/mvckkj4325fj5-mvckkj43.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvcknaubcs41j",
+   "ts": 1792252136099,
+   "date": "2025-09-27",
+   "name": "Cà phê Liberica M'Drak",
+   "process": "Mosto-Natural",
+   "origin": "M’Drak, Daklak",
+   "roast": 2,
+   "roastText": "",
+   "price": 0,
+   "unit": "250g",
+   "photo": "images/mvcknaubcs41j-mvcknaub.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
