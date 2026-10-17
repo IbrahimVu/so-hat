@@ -345,6 +345,21 @@
    "photo": "images/mvcl52h3gskvx-mvcl52h3.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvcl769sduikb",
+   "ts": 1792253063296,
+   "date": "2025-11-15",
+   "name": "Cà phê Cánh Cam H259",
+   "process": "Hybrid Washed",
+   "origin": "Xuân Trường, Đà Lạt, Lâm Đồng",
+   "roast": 1,
+   "roastText": "",
+   "price": 265000,
+   "unit": "100g",
+   "photo": "images/mvcl769sduikb-mvcl769s.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
