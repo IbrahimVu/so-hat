@@ -82,6 +82,19 @@
    "price": 108000,
    "unit": "250g",
    "photo": "images/muqtd5id6sxov.jpg"
+  },
+  {
+   "id": "mvcj9xjfnor3t",
+   "ts": 1792249832715,
+   "date": "2026-02-12",
+   "name": "Cà phê Catimor Sơn La",
+   "process": "Honey",
+   "origin": "Chiềng Chung, Sơn La",
+   "roast": 3,
+   "roastText": "",
+   "price": 79000,
+   "unit": "100g",
+   "photo": "images/mvcj9xjfnor3t-mvcj9xjf.jpg"
   }
  ]
 }
