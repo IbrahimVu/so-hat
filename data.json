@@ -670,6 +670,30 @@
     "Thơm nhẹ",
     "Hậu ngọt"
    ]
+  },
+  {
+   "id": "mvcoj1coy059w",
+   "ts": 1792258655640,
+   "date": "2026-10-10",
+   "name": "Cà phê Arabica Colombia",
+   "process": "Washed, Watermelon Co-Fermente",
+   "origin": "Caldas, Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 233000,
+   "unit": "125g",
+   "photo": "images/mvcoj1coy059w-mvcoj1co.jpg",
+   "buyUrl": "https://s.shopee.vn/9V2JsrW7iO",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Socola",
+    "Dưa hấu",
+    "Dưa lưới"
+   ]
   }
  ]
 }
