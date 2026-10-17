@@ -301,7 +301,7 @@ function workerError(e){
     name_required:"Hãy nhập tên hiển thị.",too_large:"Dữ liệu gửi lên quá lớn. Thử ảnh nhỏ hơn.",image_too_large:"Ảnh quá lớn. Thử ảnh khác.",bad_image:"Ảnh không hợp lệ. Thử ảnh JPG hoặc PNG.",
     too_many_images:"Mỗi lần lưu tối đa 6 ảnh mới.",conflict:"Máy chủ đang bận. Thử lại sau vài giây.",not_found:"Không tìm thấy sổ này.",no_worker:"Tính năng tạo sổ chưa được bật.",origin:"Trang này chưa được phép gửi tới máy chủ."};
   const extra={not_configured:"Máy chủ Worker chưa khai báo đủ biến GITHUB_TOKEN, PEPPER, REPO.",github:"Worker không ghi được vào GitHub. Kiểm tra token của Worker (quyền Contents: Read and write, còn hạn).",server:"Máy chủ Worker gặp lỗi. Xem mục Logs của Worker trên Cloudflare."};
-  toast(map[e.code]||extra[e.code]||(e.status?`Chưa lưu được (mã lỗi: ${e.code||e.status}).`:"Không kết nối được tới máy chủ Worker. Kiểm tra địa chỉ workerUrl trong config.json."),6000);
+  toast(map[e.code]||extra[e.code]||(e.status?`Chưa lưu được (mã lỗi: ${e.code||e.status}).`:`Không kết nối được tới máy chủ Worker. Mở ${CFG.workerUrl} trong trình duyệt để xem báo cáo kiểm tra.`),6000);
 }
 
 /* ================= contexts: whose book is on screen ================= */
