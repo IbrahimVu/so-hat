@@ -79,8 +79,8 @@
    "origin": "Buôn Mê Thuột, Đăk Lăk",
    "roast": 4,
    "roastText": "",
-   "price": 185000,
-   "unit": "500g",
+   "price": 108000,
+   "unit": "250g",
    "photo": "images/muqtd5id6sxov.jpg"
   },
   {
@@ -147,6 +147,19 @@
    "price": 150000,
    "unit": "125g",
    "photo": "images/mvcjlthydrdh8-mvcjlthy.jpg"
+  },
+  {
+   "id": "mvcjsgd9p8y7d",
+   "ts": 1792250696925,
+   "date": "2025-12-12",
+   "name": "Cà phê Indigo Freya Vanilla & Whisky",
+   "process": "",
+   "origin": "Cầu Đất, Shan State và Western Ghats",
+   "roast": 3,
+   "roastText": "Vừa+",
+   "price": 185000,
+   "unit": "100g",
+   "photo": "images/mvcjsgd9p8y7d-mvcjsgd9.jpg"
   }
  ]
 }
