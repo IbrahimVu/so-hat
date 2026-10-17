@@ -165,6 +165,7 @@
    "photo": "images/mvcj9xjfnor3t-mvcj9xjf.jpg",
    "buyUrl": "https://s.shopee.vn/2qVPrcsO3O",
    "infoUrl": "",
+   "soldOut": false,
    "brew": [
     "Phin",
     "Espresso"
@@ -173,7 +174,7 @@
     "Socola",
     "Caramel",
     "Hương thảo mộc",
-    "trái cây khô"
+    "Trái cây khô"
    ]
   },
   {
