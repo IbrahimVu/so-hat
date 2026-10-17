@@ -285,6 +285,21 @@
    "photo": "images/mvcktgcmwppo2-mvcktgcm.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvckvuyiy4qdt",
+   "ts": 1792252535418,
+   "date": "2025-09-13",
+   "name": "Cà Phê Quindio Macaroon Enzyme",
+   "process": "",
+   "origin": "Colombia",
+   "roast": 2,
+   "roastText": "",
+   "price": 178000,
+   "unit": "100g",
+   "photo": "images/mvckvuyiy4qdt-mvckvuyi.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
