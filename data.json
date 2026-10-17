@@ -463,7 +463,16 @@
    "unit": "200g",
    "photo": "images/mvcknaubcs41j-mvcknaub.jpg",
    "buyUrl": "",
-   "infoUrl": ""
+   "infoUrl": "",
+   "soldOut": true,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Kẹo",
+    "Đào",
+    "Hoa hồng trà"
+   ]
   },
   {
    "id": "mvckq1xl2ubwx",
