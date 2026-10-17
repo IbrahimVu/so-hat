@@ -386,7 +386,19 @@
    "roastText": "",
    "price": 250000,
    "unit": "100g",
-   "photo": "images/mvckcty9wn15q-mvckctya.jpg"
+   "photo": "images/mvckcty9wn15q-mvckctya.jpg",
+   "buyUrl": "https://s.shopee.vn/1W02KD0r01",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Hoa nhài",
+    "Đào",
+    "Cam quýt"
+   ]
   },
   {
    "id": "mvcke6fbnkf3p",
