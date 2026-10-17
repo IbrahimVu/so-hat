@@ -335,7 +335,20 @@
    "roastText": "Sáng+",
    "price": 215000,
    "unit": "100g",
-   "photo": "images/mvcjy6ugos3xs-mvcjy6uh.jpg"
+   "photo": "images/mvcjy6ugos3xs-mvcjy6uh.jpg",
+   "buyUrl": "https://s.shopee.vn/30oq6s7Bur",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Mật ong",
+    "Hoa",
+    "Dâu tây",
+    "Việt quất"
+   ]
   },
   {
    "id": "mvckbcg53cgu6",
