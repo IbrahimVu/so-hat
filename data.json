@@ -330,6 +330,21 @@
    "photo": "images/mvcl2iod8e9ep-mvcl2iod.jpg",
    "buyUrl": "",
    "infoUrl": ""
+  },
+  {
+   "id": "mvcl52h3gskvx",
+   "ts": 1792252965063,
+   "date": "2025-11-15",
+   "name": "Cà phê Lộc Rừng ECMN",
+   "process": "Carbonic Maceration Natural",
+   "origin": "Đức Trọng, Lâm Đồng",
+   "roast": 1,
+   "roastText": "",
+   "price": 235000,
+   "unit": "100g",
+   "photo": "images/mvcl52h3gskvx-mvcl52h3.jpg",
+   "buyUrl": "",
+   "infoUrl": ""
   }
  ]
 }
