@@ -95,6 +95,19 @@
    "price": 79000,
    "unit": "100g",
    "photo": "images/mvcj9xjfnor3t-mvcj9xjf.jpg"
+  },
+  {
+   "id": "mvcjc31kvxxgp",
+   "ts": 1792249933160,
+   "date": "2026-02-12",
+   "name": "Cà phê Fine Robusta",
+   "process": "Honey",
+   "origin": "Buôn Mê Thuột - Đăk Lăk",
+   "roast": 3,
+   "roastText": "",
+   "price": 69000,
+   "unit": "100g",
+   "photo": "images/mvcjc31kvxxgp-mvcjc31k.jpg"
   }
  ]
 }
