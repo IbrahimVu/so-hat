@@ -19,6 +19,7 @@
    "photo": "images/muqsaqka6z1qg.jpg",
    "buyUrl": "",
    "infoUrl": "",
+   "soldOut": true,
    "brew": [
     "Pour-over",
     "V60"
