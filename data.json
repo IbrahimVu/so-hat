@@ -285,7 +285,19 @@
    "roastText": "Vừa+",
    "price": 185000,
    "unit": "100g",
-   "photo": "images/mvcjsgd9p8y7d-mvcjsgd9.jpg"
+   "photo": "images/mvcjsgd9p8y7d-mvcjsgd9.jpg",
+   "buyUrl": "https://s.shopee.vn/30oq6jNGnC",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Espresso",
+    "Cold brew"
+   ],
+   "flavors": [
+    "Mật ong",
+    "Vanilla",
+    "Whiskey"
+   ]
   },
   {
    "id": "mvcjw5sjq3w06",
