@@ -9,14 +9,26 @@
    "id": "muqsaqka6z1qg",
    "ts": 1790934731002,
    "date": "2026-08-18",
-   "name": "Cà phê Colombia El Paraiso Double Anaerobic Flor Lichi",
+   "name": "Cà phê El Paraiso Double Anaerobic Flor Lichi",
    "process": "Double Anaerobic",
-   "origin": "Cauca - Colombia",
+   "origin": "Cauca, Colombia",
    "roast": 2,
    "roastText": "",
    "price": 450000,
    "unit": "150g",
-   "photo": "images/muqsaqka6z1qg.jpg"
+   "photo": "images/muqsaqka6z1qg.jpg",
+   "buyUrl": "",
+   "infoUrl": "",
+   "brew": [
+    "Pour-over",
+    "V60"
+   ],
+   "flavors": [
+    "Lychee",
+    "Peach",
+    "Strawberry milk",
+    "Rose"
+   ]
   },
   {
    "id": "muqsk57m5lrr1",
