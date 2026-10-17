@@ -90,6 +90,11 @@ input,textarea{font:inherit;color:var(--ink)}
 .foot{font-size:12.5px;color:var(--muted)}
 .acts2{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
 .links{display:flex;gap:6px;flex-wrap:wrap}
+.tag.flav{background:var(--accent-soft);color:var(--accent)}
+.brewline{font-size:12.5px;color:var(--muted);line-height:1.45}
+.brewline b{color:var(--ink);font-weight:600}
+.sortbox+.sortbox{margin-left:0}
+.tagadd{width:170px!important}
 .linkchip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;max-width:100%;min-width:0}
 .linkchip:hover{border-color:var(--ink)}
 .linkchip.buy{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
@@ -213,9 +218,13 @@ const PROCESS=["Washed","Natural","Honey","Anaerobic","Semi-washed"];
 const ROASTS=["Rất sáng","Sáng","Vừa","Đậm","Rất đậm"];
 const UNITS=["100g","250g","500g","1kg"];
 const ORIGINS=["Cầu Đất, Đà Lạt","Lạc Dương, Lâm Đồng","Buôn Ma Thuột, Đắk Lắk","Gia Lai","Sơn La","Khe Sanh, Quảng Trị","Ethiopia Yirgacheffe","Ethiopia Guji","Kenya","Colombia Huila","Brazil Cerrado","Panama","Guatemala","Indonesia Sumatra"];
+const BREWS=["Phin","Pour-over","Espresso","Cold brew","French press","AeroPress","Moka pot","Pha máy"];
+const FLAVORS=["Socola","Caramel","Hạt dẻ","Mật ong","Đường nâu","Berry","Cam chanh","Trái cây nhiệt đới","Hoa","Trà","Vang / lên men","Gia vị","Đắng đậm","Chua thanh"];
+const tagList=v=>Array.isArray(v)?v.map(x=>String(x||"").trim()).filter(Boolean):[];
+const splitTags=v=>String(v||"").split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
 const SORTS={new:"Mới nhất",cheap:"Giá/100g: thấp → cao",dear:"Giá/100g: cao → thấp"};
 
-const S={route:{name:"owner"},token:null,edit:false,branch:"main",filter:"Tất cả",sort:"new",del:null,delProfile:false};
+const S={route:{name:"owner"},token:null,edit:false,branch:"main",filter:"Tất cả",brew:"",sort:"new",del:null,delProfile:false};
 const OWNER={data:{profile:{},beans:[]},loaded:false,error:null};
 const COMM={index:null,loaded:false,error:null,adminIndex:null};
 const PROFILES=new Map(); // id -> {doc, error}
@@ -376,7 +385,7 @@ function parseHash(){
   if(h==="quan-tri") return {name:"admin"};
   return {name:"owner"};
 }
-function go(){ S.route=parseHash(); S.filter="Tất cả"; S.del=null; S.delProfile=false; closeSheet(); render(); ensureData(); window.scrollTo(0,0); }
+function go(){ S.route=parseHash(); S.filter="Tất cả"; S.brew=""; S.del=null; S.delProfile=false; closeSheet(); render(); ensureData(); window.scrollTo(0,0); }
 window.addEventListener("hashchange",go);
 async function ensureData(){
   const r=S.route;
@@ -421,6 +430,8 @@ function card(b,ctx){
       <h3>${esc(b.name)}</h3>
       ${b.origin?`<div class="origin">${esc(b.origin)}</div>`:""}
       <div class="tags">${b.process?`<span class="tag">${esc(b.process)}</span>`:""}${b.roastText?`<span class="roast"><i style="background:linear-gradient(90deg,var(--r1),var(--r5))"></i>Rang ${esc(b.roastText)}</span>`:`<span class="roast"><i style="background:var(--r${Math.min(5,Math.max(1,+b.roast||3))})"></i>Rang ${esc(ROASTS[Math.min(5,Math.max(1,+b.roast||3))-1].toLowerCase())}</span>`}</div>
+      ${tagList(b.brew).length?`<div class="brewline">Hợp pha: <b>${tagList(b.brew).map(esc).join(" · ")}</b></div>`:""}
+      ${tagList(b.flavors).length?`<div class="tags">${tagList(b.flavors).map(f=>`<span class="tag flav">${esc(f)}</span>`).join("")}</div>`:""}
       <div class="price">${b.price?`<b>${vnd(b.price)}</b><span>/ ${esc(b.unit||"250g")}</span>`:`<span>Chưa có giá</span>`}</div>
       ${(()=>{ const p=per100(b); return p!=null&&grams(b.unit||"250g")!==100?`<div class="per100">≈ ${vnd(Math.round(p/100)*100)} / 100g</div>`:""; })()}
       ${(()=>{ const buy=safeHref(b.buyUrl), info=safeHref(b.infoUrl); if(!buy&&!info) return "";
@@ -433,11 +444,14 @@ function toolbar(list){
   const extra=[...new Set(list.map(b=>b.process).filter(p=>p&&!PROCESS.includes(p)))];
   const used=["Tất cả",...PROCESS.filter(p=>list.some(b=>b.process===p)),...extra]; if(!used.includes(S.filter)) S.filter="Tất cả";
   const chips=used.length>2?`<div class="filters" role="group" aria-label="Lọc theo sơ chế">${used.map(p=>`<button class="chip" data-act="filter" data-v="${esc(p)}" aria-pressed="${p===S.filter}">${esc(p)}</button>`).join("")}</div>`:"";
+  const brews=[...new Set(list.flatMap(b=>tagList(b.brew)))].sort((a,b)=>{ const x=BREWS.indexOf(a),y=BREWS.indexOf(b); return (x<0?99:x)-(y<0?99:y)||a.localeCompare(b,"vi"); });
+  if(S.brew&&!brews.includes(S.brew)) S.brew="";
+  const brewSel=brews.length?`<label class="sortbox">Kiểu pha<select id="brewSel"><option value="">Tất cả</option>${brews.map(v=>`<option value="${esc(v)}" ${S.brew===v?"selected":""}>${esc(v)}</option>`).join("")}</select></label>`:"";
   const sort=list.length>1?`<label class="sortbox">Sắp xếp<select id="sortSel">${Object.entries(SORTS).map(([k,v])=>`<option value="${k}" ${S.sort===k?"selected":""}>${v}</option>`).join("")}</select></label>`:"";
-  return chips||sort?`<div class="toolbar">${chips}${sort}</div>`:"";
+  return chips||sort||brewSel?`<div class="toolbar">${chips}<div style="display:flex;gap:12px;flex-wrap:wrap;margin-left:auto">${brewSel}${sort}</div></div>`:"";
 }
 function sorted(list){
-  const r=S.filter==="Tất cả"?list.slice():list.filter(b=>b.process===S.filter);
+  const r=(S.filter==="Tất cả"?list.slice():list.filter(b=>b.process===S.filter)).filter(b=>!S.brew||tagList(b.brew).includes(S.brew));
   if(S.sort==="new") return r.sort(byDate);
   return r.sort((a,b)=>{ const x=per100(a),y=per100(b); if(x==null&&y==null) return byDate(a,b); if(x==null) return 1; if(y==null) return -1; return S.sort==="cheap"?x-y:y-x; });
 }
@@ -589,7 +603,7 @@ function openLogin(){
 }
 function openBean(b){
   F=b?{...b,pic:imgUrl(b.photo)||null,picNew:null}:{id:null,name:"",date:today(),process:"",origin:"",roast:3,roastText:"",price:0,unit:"250g",photo:"",pic:null,picNew:null};
-  F.kind="bean"; F.busy=false; if(!F.date) F.date=dayOf(F);
+  F.kind="bean"; F.busy=false; if(!F.date) F.date=dayOf(F); F.brew=tagList(F.brew); F.flavors=tagList(F.flavors);
   const chip=(k,v,on)=>`<button type="button" class="chip" data-chip="${k}" data-v="${esc(v)}" aria-pressed="${on}">${esc(v)}</button>`;
   const cProc=F.process&&!PROCESS.includes(F.process), cUnit=!UNITS.includes(F.unit);
   sheet(F.id?"Sửa hạt":"Thêm hạt",`
@@ -602,6 +616,8 @@ function openBean(b){
     <div class="field"><label class="lbl" for="f-origin">Vùng trồng</label><input id="f-origin" list="dl-o" maxlength="80" value="${esc(F.origin)}" placeholder="Cầu Đất, Đà Lạt"><datalist id="dl-o">${ORIGINS.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
     <div class="field"><span class="lbl">Ngưỡng rang</span><div class="roastpick" role="group">${ROASTS.map((r,i)=>`<button type="button" data-chip="roast" data-v="${i+1}" aria-pressed="${!F.roastText&&+F.roast===i+1}"><i style="background:var(--r${i+1})"></i><span>${r}</span></button>`).join("")}</div>
       <div class="unitrow"><input id="f-roast" maxlength="40" placeholder="Khác: Medium-light, Omni, Agtron 65…" aria-label="Ngưỡng rang khác" value="${esc(F.roastText||"")}" class="${F.roastText?"on":""}" style="width:100%;max-width:320px"></div></div>
+    <div class="field"><span class="lbl">Phù hợp pha (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Phù hợp pha">${[...BREWS,...F.brew.filter(v=>!BREWS.includes(v))].map(v=>`<button type="button" class="chip" data-chip="brew" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.brew.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-brew-x" class="tagadd" maxlength="60" placeholder="Khác: Syphon, Clever…" aria-label="Kiểu pha khác"></div></div>
+    <div class="field"><span class="lbl">Hương vị (chọn nhiều)</span><div class="unitrow" role="group" aria-label="Hương vị">${[...FLAVORS,...F.flavors.filter(v=>!FLAVORS.includes(v))].map(v=>`<button type="button" class="chip" data-chip="flavors" data-multi="1" data-v="${esc(v)}" aria-pressed="${F.flavors.includes(v)}">${esc(v)}</button>`).join("")}<input id="f-flav-x" class="tagadd" maxlength="80" placeholder="Thêm vị: Vải, Nho, Quế…" aria-label="Hương vị khác"></div></div>
     <div class="field"><label class="lbl" for="f-price">Giá bán</label><div class="pricebox"><input id="f-price" inputmode="numeric" maxlength="13" value="${F.price?Number(F.price).toLocaleString("vi-VN"):""}" placeholder="180.000"><span>₫</span></div>
       <div class="unitrow" role="group" aria-label="Khối lượng">${UNITS.map(v=>chip("unit",v,F.unit===v)).join("")}<input id="f-unit" maxlength="10" placeholder="Khác: 300g" aria-label="Khối lượng khác" value="${cUnit?esc(F.unit||""):""}" class="${cUnit?"on":""}"></div></div>
     <div class="field"><label class="lbl" for="f-buy">Link mua (tuỳ chọn)</label><input id="f-buy" inputmode="url" autocomplete="off" maxlength="500" value="${esc(F.buyUrl||"")}" placeholder="Shopee, website quán rang, trang Facebook…"></div>
@@ -628,9 +644,10 @@ function openProfileSheet(ctx){
 function logout(){ S.edit=false; S.token=null; try{ localStorage.removeItem(TOKEN_KEY); }catch(e){} OWNER.loaded=false; ensureData(); render(); }
 
 /* ================= events ================= */
-document.addEventListener("change",e=>{ if(e.target.id==="sortSel"){ S.sort=e.target.value; try{localStorage.setItem("sohat-sort",S.sort)}catch(_){} render(); } });
+document.addEventListener("change",e=>{ if(e.target.id==="brewSel"){ S.brew=e.target.value; render(); return; } if(e.target.id==="sortSel"){ S.sort=e.target.value; try{localStorage.setItem("sohat-sort",S.sort)}catch(_){} render(); } });
 document.addEventListener("click",async ev=>{
   const c=ev.target.closest("[data-chip]");
+  if(c&&F&&F.kind==="bean"&&c.dataset.multi==="1"){ const k=c.dataset.chip, v=c.dataset.v; const set=new Set(F[k]); set.has(v)?set.delete(v):set.add(v); F[k]=[...set]; c.setAttribute("aria-pressed",String(set.has(v))); return; }
   if(c&&F&&F.kind==="bean"){ const k=c.dataset.chip; let v=c.dataset.v;
     const clr=id=>{ const el=document.getElementById(id); if(el){ el.value=""; el.classList.remove("on"); } };
     if(k==="process") clr("f-proc"); if(k==="unit") clr("f-unit"); if(k==="roast"){ v=+v; F.roastText=""; clr("f-roast"); }
@@ -727,7 +744,9 @@ document.addEventListener("submit",async ev=>{
   if(F.picNew) pending.push({slot:id,dataUrl:F.picNew}); else if(!F.pic) photo="";
   const bean={ id, ts:F.ts||Date.now(), date:document.getElementById("f-date").value||today(), name, process:(F.process||"").trim(),
     origin:document.getElementById("f-origin").value.trim(), roast:+F.roast||3, roastText:(F.roastText||"").trim(),
-    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo, buyUrl, infoUrl };
+    price:Number(document.getElementById("f-price").value.replace(/\D/g,""))||0, unit, photo, buyUrl, infoUrl,
+    brew:[...new Set([...F.brew,...splitTags(document.getElementById("f-brew-x").value)])].slice(0,10).map(x=>x.slice(0,24)),
+    flavors:[...new Set([...F.flavors,...splitTags(document.getElementById("f-flav-x").value)])].slice(0,15).map(x=>x.slice(0,30)) };
   const beans=[...ctx.data.beans], i=beans.findIndex(x=>x.id===id); if(i>=0) beans[i]=bean; else beans.push(bean);
   if(await ctx.commit({...ctx.data,beans},pending,i>=0?"Đã lưu thay đổi":"Đã đăng hạt",(i>=0?"Sửa hạt: ":"Thêm hạt: ")+name)) closeSheet();
 });
