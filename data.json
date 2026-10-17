@@ -118,7 +118,7 @@
    "origin": "Cầu Đất, Việt Nam",
    "roast": 3,
    "roastText": "Omni",
-   "price": 90000,
+   "price": 110000,
    "unit": "125g",
    "photo": "images/mvcjezr17ue93-mvcjezr1.jpg"
   },
@@ -134,6 +134,19 @@
    "price": 115000,
    "unit": "125g",
    "photo": "images/mvcjgjkwviayb-mvcjgjkw.jpg"
+  },
+  {
+   "id": "mvcjlthydrdh8",
+   "ts": 1792250387350,
+   "date": "2026-01-20",
+   "name": "Cà Phê Costa Rica Don Claudio",
+   "process": "Washed",
+   "origin": "Pérez Zeledón, Brunca, Costa Rica",
+   "roast": 2,
+   "roastText": "",
+   "price": 150000,
+   "unit": "125g",
+   "photo": "images/mvcjlthydrdh8-mvcjlthy.jpg"
   }
  ]
 }
