@@ -186,6 +186,19 @@
    "price": 215000,
    "unit": "100g",
    "photo": "images/mvcjy6ugos3xs-mvcjy6uh.jpg"
+  },
+  {
+   "id": "mvckbcg53cgu6",
+   "ts": 1792251578309,
+   "date": "2025-12-12",
+   "name": "Cà phê Violet of Thor Jasmine & Strawberry",
+   "process": "",
+   "origin": "Lâm Đồng, Ấn Độ và nông trại El Paraiso",
+   "roast": 3,
+   "roastText": "Sáng+",
+   "price": 225000,
+   "unit": "100g",
+   "photo": "images/mvckbcg53cgu6-mvckbcg5.jpg"
   }
  ]
 }
