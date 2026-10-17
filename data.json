@@ -212,6 +212,19 @@
    "price": 250000,
    "unit": "100g",
    "photo": "images/mvckcty9wn15q-mvckctya.jpg"
+  },
+  {
+   "id": "mvcke6fbnkf3p",
+   "ts": 1792251710471,
+   "date": "2025-12-12",
+   "name": "Cà phê House Blend - Peach & Orange Mars",
+   "process": "",
+   "origin": "Nông trại vùng núi Shan State và Kenya",
+   "roast": 3,
+   "roastText": "Sáng+",
+   "price": 255000,
+   "unit": "100g",
+   "photo": "images/mvcke6fbnkf3p-mvcke6fb.jpg"
   }
  ]
 }
