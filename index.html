@@ -228,7 +228,7 @@ const BREWS=["Phin","Pour-over","Espresso","Cold brew","French press","AeroPress
 const FLAVORS=["Socola","Caramel","Hạt dẻ","Mật ong","Đường nâu","Berry","Cam chanh","Trái cây nhiệt đới","Hoa","Trà","Vang / lên men","Gia vị","Đắng đậm","Chua thanh"];
 const tagList=v=>Array.isArray(v)?v.map(x=>String(x||"").trim()).filter(Boolean):[];
 const splitTags=v=>String(v||"").split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
-const PROMOTE_MIN=6; // a typed-in value used more than 5 times becomes a ready-made choice
+const PROMOTE_MIN=5; // a typed-in value used on 5 or more beans becomes a ready-made choice
 const normKey=v=>String(v||"").trim().toLowerCase().replace(/\s+/g," ");
 function tally(target,field,values){ const m=target[field]||(target[field]=new Map()); for(const [label,n] of values){ const k=normKey(label); if(!k) continue; const e=m.get(k)||{n:0,labels:new Map()}; e.n+=n; e.labels.set(label,(e.labels.get(label)||0)+n); m.set(k,e); } }
 function beanCounts(beans){ const out={}; const add=(f,v)=>{ v=String(v||"").trim(); if(!v) return; (out[f]||(out[f]={}))[v]=(out[f][v]||0)+1; };
@@ -640,7 +640,7 @@ function openBean(b){
       <div class="field"><label class="lbl" for="f-name">Tên hạt</label><input id="f-name" required maxlength="100" value="${esc(F.name)}" placeholder="Arabica Cầu Đất, Ethiopia Guji…"></div>
       <div class="field"><label class="lbl" for="f-date">Ngày</label><input id="f-date" type="date" required value="${esc(F.date)}"></div>
     </div>
-    <div class="field"><span class="lbl">Sơ chế</span><div class="unitrow" role="group" aria-label="Sơ chế">${PROC.map(v=>chip("process",v,F.process===v)).join("")}<input id="f-proc" maxlength="30" placeholder="Khác: Carbonic…" aria-label="Kiểu sơ chế khác" value="${cProc?esc(F.process):""}" class="${cProc?"on":""}" style="width:150px"></div></div>
+    <div class="field"><span class="lbl">Sơ chế</span><div class="unitrow" role="group" aria-label="Sơ chế">${PROC.map(v=>chip("process",v,F.process===v)).join("")}<input id="f-proc" maxlength="80" placeholder="Khác: Carbonic…" aria-label="Kiểu sơ chế khác" value="${cProc?esc(F.process):""}" class="${cProc?"on":""}" style="width:150px"></div></div>
     <div class="field"><label class="lbl" for="f-origin">Vùng trồng</label><input id="f-origin" list="dl-o" maxlength="80" value="${esc(F.origin)}" placeholder="Cầu Đất, Đà Lạt"><datalist id="dl-o">${ORG.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></div>
     <div class="field"><span class="lbl">Ngưỡng rang</span><div class="roastpick" role="group">${ROASTS.map((r,i)=>`<button type="button" data-chip="roast" data-v="${i+1}" aria-pressed="${!F.roastText&&+F.roast===i+1}"><i style="background:var(--r${i+1})"></i><span>${r}</span></button>`).join("")}</div>
       <div class="unitrow" role="group" aria-label="Ngưỡng rang khác">${RTX.map(v=>chip("roastText",v,F.roastText===v)).join("")}<input id="f-roast" maxlength="40" placeholder="Khác: Medium-light, Omni, Agtron 65…" aria-label="Ngưỡng rang khác" value="${cRoast?esc(F.roastText):""}" class="${cRoast?"on":""}" style="flex:1 1 220px;max-width:320px"></div></div>
