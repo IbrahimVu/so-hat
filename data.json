@@ -539,8 +539,16 @@
    "price": 178000,
    "unit": "100g",
    "photo": "images/mvckvuyiy4qdt-mvckzbem.jpg",
-   "buyUrl": "",
-   "infoUrl": ""
+   "buyUrl": "https://s.shopee.vn/AKbQr3NV3Y",
+   "infoUrl": "",
+   "soldOut": false,
+   "brew": [
+    "Pour-over"
+   ],
+   "flavors": [
+    "Caramel",
+    "Bánh quy hạnh nhân nướng"
+   ]
   },
   {
    "id": "mvckxzkoc51w3",
